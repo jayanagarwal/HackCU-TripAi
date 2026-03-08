@@ -47,7 +47,6 @@ export default function JoinTripClient({
         try {
             const supabase = createClient();
 
-            // Ensure user exists in users table
             const { data: existingUser } = await supabase
                 .from("users")
                 .select("id")
@@ -63,7 +62,6 @@ export default function JoinTripClient({
                 });
             }
 
-            // Join the trip
             const { error: joinError } = await supabase
                 .from("trip_members")
                 .insert({
@@ -74,7 +72,6 @@ export default function JoinTripClient({
 
             if (joinError) {
                 if (joinError.code === "23505") {
-                    // Already a member
                     router.push(`/trip/${trip.id}/preferences`);
                     return;
                 }
@@ -93,95 +90,66 @@ export default function JoinTripClient({
     return (
         <div className="min-h-screen pt-24 pb-16 page-transition">
             <div className="mx-auto max-w-lg px-4">
-                <div className="rounded-2xl border border-border bg-card p-8 text-center shadow-lg">
-                    {/* Trip invite header */}
-                    <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl gradient-bg-animated text-4xl text-white shadow-lg">
-                        ✈️
+                <div className="border-4 border-foreground p-8 text-center">
+                    <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center border-4 border-foreground text-4xl font-black">
+                        ↗
                     </div>
 
-                    <p className="text-sm font-medium text-muted uppercase tracking-wider">
+                    <p className="text-xs font-black text-muted uppercase tracking-widest">
                         You&apos;re invited to
                     </p>
-                    <h1 className="mt-2 text-3xl font-bold text-foreground">
+                    <h1 className="mt-2 text-3xl font-black uppercase tracking-tighter text-foreground">
                         {trip.name}
                     </h1>
 
-                    {/* Trip details */}
-                    <div className="mt-6 flex flex-wrap justify-center gap-3">
+                    <div className="mt-6 flex flex-wrap justify-center gap-2">
                         {trip.trip_duration_days && (
-                            <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 border border-indigo-200 px-3 py-1.5 text-sm font-medium text-indigo-700">
-                                📅 {trip.trip_duration_days} days
+                            <span className="inline-flex items-center border-2 border-foreground px-3 py-1.5 text-sm font-bold text-foreground">
+                                {trip.trip_duration_days} days
                             </span>
                         )}
                         {trip.group_size && (
-                            <span className="inline-flex items-center gap-1.5 rounded-full bg-cyan-50 border border-cyan-200 px-3 py-1.5 text-sm font-medium text-cyan-700">
-                                👥 {trip.group_size} travelers
+                            <span className="inline-flex items-center border-2 border-foreground px-3 py-1.5 text-sm font-bold text-foreground">
+                                {trip.group_size} travelers
                             </span>
                         )}
                         {trip.destination && (
-                            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1.5 text-sm font-medium text-emerald-700">
-                                📍 {trip.destination}
+                            <span className="inline-flex items-center border-2 border-foreground px-3 py-1.5 text-sm font-bold text-foreground">
+                                ⌖ {trip.destination}
                             </span>
                         )}
                         {trip.start_date && (
-                            <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1.5 text-sm font-medium text-amber-700">
-                                🗓️ {new Date(trip.start_date).toLocaleDateString()}
+                            <span className="inline-flex items-center border-2 border-foreground px-3 py-1.5 text-sm font-bold text-foreground">
+                                {new Date(trip.start_date).toLocaleDateString()}
                             </span>
                         )}
                     </div>
 
-                    {/* Error */}
                     {error && (
-                        <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                            {error}
+                        <div className="mt-4 border-4 border-foreground px-4 py-3 text-sm text-foreground font-bold">
+                            ✗ {error}
                         </div>
                     )}
 
-                    {/* Action */}
                     <div className="mt-8">
                         {user ? (
                             <button
                                 onClick={handleJoin}
                                 disabled={loading}
-                                className="w-full rounded-xl gradient-bg py-4 text-lg font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+                                className="w-full btn-brutal py-4 text-lg"
                             >
-                                {loading ? (
-                                    <span className="flex items-center justify-center gap-2">
-                                        <svg
-                                            className="h-5 w-5 animate-spin"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                        >
-                                            <circle
-                                                className="opacity-25"
-                                                cx="12"
-                                                cy="12"
-                                                r="10"
-                                                stroke="currentColor"
-                                                strokeWidth="4"
-                                            />
-                                            <path
-                                                className="opacity-75"
-                                                fill="currentColor"
-                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                                            />
-                                        </svg>
-                                        Joining...
-                                    </span>
-                                ) : (
-                                    "Join This Trip 🎉"
-                                )}
+                                {loading ? "Joining..." : "Join This Trip ↗"}
                             </button>
                         ) : (
                             <div>
-                                <p className="mb-4 text-sm text-muted">
+                                <p className="mb-4 text-sm text-muted font-medium">
                                     Sign in to join this trip and share your preferences
                                 </p>
                                 <button
                                     onClick={handleSignIn}
-                                    className="w-full rounded-xl gradient-bg py-4 text-lg font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
+                                    className="w-full btn-brutal py-4 text-lg"
                                 >
-                                    Sign in with Google to Join
+                                    Sign In to Join
                                 </button>
                             </div>
                         )}

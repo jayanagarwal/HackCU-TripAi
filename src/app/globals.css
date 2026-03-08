@@ -2,61 +2,35 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ═══════════════════════════════════════════
+   BRUTALIST DESIGN SYSTEM — MONOCHROME ONLY
+   ═══════════════════════════════════════════ */
+
 :root {
-  --background: #fafbff;
-  --foreground: #0f172a;
-  --primary: #6366f1;
-  --primary-light: #818cf8;
-  --primary-dark: #4f46e5;
-  --accent: #06b6d4;
-  --accent-light: #22d3ee;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --muted: #94a3b8;
-  --border: #e2e8f0;
+  --background: #ffffff;
+  --foreground: #000000;
+  --muted: #666666;
+  --border: #000000;
   --card: #ffffff;
-  --card-hover: #f8fafc;
-  --gradient-start: #6366f1;
-  --gradient-mid: #8b5cf6;
-  --gradient-end: #06b6d4;
+  --card-hover: #f0f0f0;
   --input-bg: #ffffff;
-  --input-border: #d1d5db;
+  --input-border: #000000;
 }
 
 html.dark {
-  --background: #0f1117;
-  --foreground: #e2e8f0;
-  --primary: #818cf8;
-  --primary-light: #a5b4fc;
-  --primary-dark: #6366f1;
-  --accent: #22d3ee;
-  --accent-light: #67e8f9;
-  --success: #34d399;
-  --warning: #fbbf24;
-  --danger: #f87171;
-  --muted: #64748b;
-  --border: #1e293b;
-  --card: #1a1d2e;
-  --card-hover: #222640;
-  --gradient-start: #818cf8;
-  --gradient-mid: #a78bfa;
-  --gradient-end: #22d3ee;
-  --input-bg: #1a1d2e;
-  --input-border: #334155;
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --muted: #888888;
+  --border: #ffffff;
+  --card: #0a0a0a;
+  --card-hover: #1a1a1a;
+  --input-bg: #0a0a0a;
+  --input-border: #ffffff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-primary-light: var(--primary-light);
-  --color-primary-dark: var(--primary-dark);
-  --color-accent: var(--accent);
-  --color-accent-light: var(--accent-light);
-  --color-success: var(--success);
-  --color-warning: var(--warning);
-  --color-danger: var(--danger);
   --color-muted: var(--muted);
   --color-border: var(--border);
   --color-card: var(--card);
@@ -65,159 +39,167 @@ html.dark {
   --font-mono: var(--font-geist-mono);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
 }
 
-/* Animated gradient text */
-.gradient-text {
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid), var(--gradient-end));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* ── Snap-scroll landing page ── */
+
+.snap-container {
+  height: 100vh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Animated gradient background */
-.gradient-bg {
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid), var(--gradient-end));
+.snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+  padding-top: 4rem; /* navbar clearance */
 }
 
-.gradient-bg-animated {
-  background: linear-gradient(-45deg,
-      var(--gradient-start),
-      var(--gradient-mid),
-      var(--gradient-end),
-      var(--accent));
-  background-size: 400% 400%;
-  animation: gradientShift 8s ease infinite;
+.snap-section-footer {
+  scroll-snap-align: start;
+  height: auto;
+  min-height: 80px;
+  padding: 2rem 0;
 }
 
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
+/* Carousel progress bar on active tile */
+@keyframes carouselFill {
+  from { width: 0%; }
+  to   { width: 100%; }
 }
 
-/* Floating animation */
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-12px);
-  }
+.carousel-progress {
+  animation: carouselFill 3s linear;
 }
 
-.animate-float {
-  animation: float 4s ease-in-out infinite;
+/* ── Brutalist Utilities ── */
+
+.btn-brutal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--foreground);
+  color: var(--background);
+  border: 4px solid var(--foreground);
+  padding: 0.75rem 1.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  transition: background 0.15s, color 0.15s;
+  cursor: pointer;
 }
 
-.animate-float-delayed {
-  animation: float 4s ease-in-out infinite 1s;
+.btn-brutal:hover {
+  background: var(--background);
+  color: var(--foreground);
 }
 
-.animate-float-slow {
-  animation: float 6s ease-in-out infinite 0.5s;
+.btn-brutal:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
-/* Glass effect */
-.glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+.btn-brutal-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--background);
+  color: var(--foreground);
+  border: 4px solid var(--foreground);
+  padding: 0.75rem 1.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  transition: background 0.15s, color 0.15s;
+  cursor: pointer;
 }
 
-html.dark .glass {
-  background: rgba(26, 29, 46, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+.btn-brutal-outline:hover {
+  background: var(--foreground);
+  color: var(--background);
 }
 
-/* Subtle pulse glow */
-@keyframes pulseGlow {
-
-  0%,
-  100% {
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
-  }
-
-  50% {
-    box-shadow: 0 0 40px rgba(99, 102, 241, 0.3);
-  }
+/* Inverted text (for emphasis) */
+.text-inverted {
+  background: var(--foreground);
+  color: var(--background);
+  padding: 0 0.25rem;
 }
 
-.pulse-glow {
-  animation: pulseGlow 3s ease-in-out infinite;
-}
+/* ── Minimal Animations ── */
 
-.animate-pulse-glow {
-  animation: pulseGlow 3s ease-in-out infinite;
-}
-
-/* Smooth page transitions */
 .page-transition {
-  animation: fadeInUp 0.5s ease-out;
+  animation: fadeInUp 0.3s ease-out;
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.6s ease-out;
+  animation: fadeIn 0.3s ease-out;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
+/* ── Brutalist Range Slider ── */
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: var(--foreground);
+  outline: none;
+  border: none;
+  border-radius: 0;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  background: var(--foreground);
+  border: 4px solid var(--background);
+  cursor: pointer;
+  border-radius: 0;
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--muted);
-  border-radius: 3px;
+input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background: var(--foreground);
+  border: 4px solid var(--background);
+  cursor: pointer;
+  border-radius: 0;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-light);
-}
+/* ── Scrollbar ── */
 
-/* === DARK MODE OVERRIDES === */
-/* These override hardcoded Tailwind colors that don't use CSS variables */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--foreground); }
+
+/* ── Global Input Overrides ── */
 
 html.dark input,
 html.dark textarea,
@@ -232,183 +214,6 @@ html.dark textarea::placeholder {
   color: var(--muted);
 }
 
-/* Colored accent backgrounds */
-html.dark .bg-indigo-50 {
-  background-color: rgba(99, 102, 241, 0.1) !important;
-}
-
-html.dark .bg-cyan-50 {
-  background-color: rgba(6, 182, 212, 0.1) !important;
-}
-
-html.dark .bg-emerald-50 {
-  background-color: rgba(16, 185, 129, 0.1) !important;
-}
-
-html.dark .bg-amber-50 {
-  background-color: rgba(245, 158, 11, 0.1) !important;
-}
-
-html.dark .bg-red-50 {
-  background-color: rgba(239, 68, 68, 0.1) !important;
-}
-
-html.dark .bg-violet-50 {
-  background-color: rgba(139, 92, 246, 0.1) !important;
-}
-
-html.dark .bg-teal-50 {
-  background-color: rgba(20, 184, 166, 0.1) !important;
-}
-
-html.dark .bg-blue-50 {
-  background-color: rgba(59, 130, 246, 0.1) !important;
-}
-
-/* Half-opacity colored backgrounds */
-html.dark [class*="bg-indigo-50/50"] {
-  background-color: rgba(99, 102, 241, 0.06) !important;
-}
-
-html.dark [class*="bg-emerald-50/50"] {
-  background-color: rgba(16, 185, 129, 0.06) !important;
-}
-
-/* Colored borders */
-html.dark .border-indigo-200 {
-  border-color: rgba(99, 102, 241, 0.2) !important;
-}
-
-html.dark .border-cyan-200 {
-  border-color: rgba(6, 182, 212, 0.2) !important;
-}
-
-html.dark .border-emerald-200 {
-  border-color: rgba(16, 185, 129, 0.2) !important;
-}
-
-html.dark .border-emerald-300 {
-  border-color: rgba(16, 185, 129, 0.3) !important;
-}
-
-html.dark .border-amber-200 {
-  border-color: rgba(245, 158, 11, 0.2) !important;
-}
-
-html.dark .border-red-200 {
-  border-color: rgba(239, 68, 68, 0.2) !important;
-}
-
-html.dark .border-violet-200 {
-  border-color: rgba(139, 92, 246, 0.2) !important;
-}
-
-html.dark .border-teal-200 {
-  border-color: rgba(20, 184, 166, 0.2) !important;
-}
-
-html.dark .border-blue-200 {
-  border-color: rgba(59, 130, 246, 0.2) !important;
-}
-
-/* White/light backgrounds */
-html.dark .bg-white {
-  background-color: var(--card) !important;
-}
-
-html.dark [class*="bg-white/80"] {
-  background-color: rgba(26, 29, 46, 0.8) !important;
-}
-
-html.dark [class*="bg-white/60"] {
-  background-color: rgba(26, 29, 46, 0.6) !important;
-}
-
-/* Colored text - soften in dark mode */
-html.dark .text-indigo-700 {
-  color: #a5b4fc !important;
-}
-
-html.dark .text-indigo-600 {
-  color: #a5b4fc !important;
-}
-
-html.dark [class*="text-indigo-600/70"] {
-  color: rgba(165, 180, 252, 0.7) !important;
-}
-
-html.dark .text-cyan-700 {
-  color: #67e8f9 !important;
-}
-
-html.dark .text-emerald-700 {
-  color: #6ee7b7 !important;
-}
-
-html.dark .text-emerald-800 {
-  color: #6ee7b7 !important;
-}
-
-html.dark .text-emerald-600 {
-  color: #6ee7b7 !important;
-}
-
-html.dark .text-amber-700 {
-  color: #fcd34d !important;
-}
-
-html.dark .text-red-600 {
-  color: #fca5a5 !important;
-}
-
-html.dark .text-red-700 {
-  color: #fca5a5 !important;
-}
-
-html.dark .text-violet-700 {
-  color: #c4b5fd !important;
-}
-
-html.dark .text-blue-700 {
-  color: #93c5fd !important;
-}
-
-html.dark .text-blue-600 {
-  color: #93c5fd !important;
-}
-
-html.dark .text-teal-700 {
-  color: #5eead4 !important;
-}
-
-/* Emerald backgrounds for success states */
-html.dark .bg-emerald-500 {
-  background-color: #059669 !important;
-}
-
-html.dark .bg-emerald-600 {
-  background-color: #047857 !important;
-}
-
-html.dark .hover\:bg-emerald-700:hover {
-  background-color: #065f46 !important;
-}
-
-/* Sign out hover */
-html.dark .hover\:bg-red-50:hover {
-  background-color: rgba(239, 68, 68, 0.1) !important;
-}
-
-html.dark .hover\:bg-indigo-50:hover {
-  background-color: rgba(99, 102, 241, 0.1) !important;
-}
-
-/* Dashed borders */
-html.dark .border-dashed {
-  border-color: var(--border) !important;
-}
-
-/* Slider/range inputs */
-html.dark input[type="range"] {
-  background-color: var(--border) !important;
-}
+/* Force monochrome on all colored classes */
+.bg-white { background-color: var(--card) !important; }
+html.dark .bg-white { background-color: var(--card) !important; }

@@ -121,7 +121,7 @@ export default function DayMap({ stops, highlightedIndex }: DayMapProps) {
     const routePoints: [number, number][] = stops.map((s) => [s.lat, s.lng]);
 
     return (
-        <div className="relative rounded-2xl overflow-hidden border border-border shadow-lg" style={{ height: 400 }}>
+        <div className="relative overflow-hidden border-4 border-foreground" style={{ height: 400 }}>
             <LayerToggle isSatellite={isSatellite} onToggle={() => setIsSatellite((v) => !v)} />
             <MapContainer
                 bounds={bounds}

@@ -28,14 +28,10 @@ interface DashboardClientProps {
 }
 
 const statusColors: Record<string, string> = {
-    collecting:
-        "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-300 dark:border-amber-500/40",
-    ready:
-        "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/30 dark:text-blue-300 dark:border-blue-500/40",
-    planning:
-        "bg-violet-50 text-violet-700 border-violet-200 dark:bg-violet-950/30 dark:text-violet-300 dark:border-violet-500/40",
-    complete:
-        "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-300 dark:border-emerald-500/40",
+    collecting: "bg-foreground text-background",
+    ready: "bg-foreground text-background",
+    planning: "bg-foreground text-background",
+    complete: "bg-foreground text-background",
 };
 
 const statusLabels: Record<string, string> = {
@@ -90,37 +86,36 @@ export default function DashboardClient({ trips: initialTrips }: DashboardClient
                     {/* Header */}
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-3xl font-bold text-foreground">My Trips</h1>
-                            <p className="mt-1 text-muted">
-                                Plan, join, and manage your group adventures
+                            <h1 className="text-3xl sm:text-4xl font-black uppercase tracking-tighter text-foreground">MY TRIPS</h1>
+                            <p className="mt-1 text-sm font-bold uppercase tracking-wide text-muted">
+                                PLAN, JOIN, AND MANAGE YOUR GROUP ADVENTURES
                             </p>
                         </div>
                         <Link
                             href="/trip/new"
-                            className="inline-flex items-center gap-2 rounded-full gradient-bg px-6 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:shadow-lg hover:scale-105 active:scale-95"
+                            className="btn-brutal text-sm px-5 py-2.5"
                         >
-                            <span className="text-lg">+</span> Plan a Trip
+                            + PLAN A TRIP
                         </Link>
                     </div>
 
                     {trips.length === 0 ? (
                         /* Empty state */
                         <div className="mt-16 flex flex-col items-center justify-center text-center">
-                            <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-950/30 text-5xl">
-                                ✈️
+                            <div className="flex h-24 w-24 items-center justify-center border-4 border-foreground text-5xl">
+                                ✈
                             </div>
-                            <h2 className="mt-6 text-xl font-semibold text-foreground">
-                                No trips yet
+                            <h2 className="mt-6 text-xl font-black uppercase tracking-tighter text-foreground">
+                                NO TRIPS YET
                             </h2>
-                            <p className="mt-2 max-w-sm text-muted">
-                                Start planning your first group trip or join one using a share code
-                                from a friend.
+                            <p className="mt-2 max-w-sm text-sm font-bold uppercase tracking-wide text-muted">
+                                START PLANNING YOUR FIRST GROUP TRIP OR JOIN ONE WITH A SHARE CODE.
                             </p>
                             <Link
                                 href="/trip/new"
-                                className="mt-6 inline-flex items-center gap-2 rounded-full gradient-bg px-8 py-3 text-base font-semibold text-white shadow-md transition-all hover:shadow-lg hover:scale-105 active:scale-95"
+                                className="mt-6 btn-brutal text-base px-8 py-3"
                             >
-                                Plan Your First Trip 🚀
+                                PLAN YOUR FIRST TRIP ↗
                             </Link>
                         </div>
                     ) : (
@@ -141,7 +136,7 @@ export default function DashboardClient({ trips: initialTrips }: DashboardClient
                                 return (
                                     <div
                                         key={trip.id}
-                                        className="group rounded-2xl border border-border bg-card p-6 transition-all hover:shadow-lg hover:border-primary-light hover:-translate-y-1"
+                                        className="group border-4 border-foreground bg-card p-6 transition-all hover:bg-card-hover"
                                     >
                                         <div className="flex items-start justify-between">
                                             <div className="flex-1">
@@ -153,13 +148,13 @@ export default function DashboardClient({ trips: initialTrips }: DashboardClient
                                                 </Link>
                                                 <div className="mt-2 flex flex-wrap items-center gap-2">
                                                     <span
-                                                        className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${statusColors[trip.status] || statusColors.collecting}`}
+                                                        className={`inline-flex items-center px-2.5 py-0.5 text-xs font-black uppercase ${statusColors[trip.status] || statusColors.collecting}`}
                                                     >
                                                         {statusLabels[trip.status] || trip.status}
                                                     </span>
                                                     {trip.is_leader && (
-                                                        <span className="inline-flex items-center rounded-full bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-950/30 dark:text-indigo-300 dark:border-indigo-500/40">
-                                                            👑 Leader
+                                                        <span className="inline-flex items-center bg-foreground text-background px-2.5 py-0.5 text-xs font-black uppercase">
+                                                            ★ LEADER
                                                         </span>
                                                     )}
                                                 </div>
@@ -173,7 +168,7 @@ export default function DashboardClient({ trips: initialTrips }: DashboardClient
                                                             e.stopPropagation();
                                                             setDeleteTarget(trip);
                                                         }}
-                                                        className="rounded-lg p-1.5 text-muted hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all opacity-0 group-hover:opacity-100"
+                                                        className="p-1.5 text-muted hover:text-foreground transition-all"
                                                         title="Delete trip"
                                                     >
                                                         <svg
@@ -239,7 +234,7 @@ export default function DashboardClient({ trips: initialTrips }: DashboardClient
                                                             </p>
                                                         )}
                                                         {trip.my_estimated_cost != null && (
-                                                            <p className="text-lg font-bold gradient-text mt-1">
+                                                            <p className="text-lg font-black text-foreground mt-1">
                                                                 ${trip.my_estimated_cost.toLocaleString()}
                                                                 <span className="text-xs font-normal text-muted ml-1">
                                                                     your est. cost
@@ -249,9 +244,9 @@ export default function DashboardClient({ trips: initialTrips }: DashboardClient
                                                     </div>
                                                     <Link
                                                         href={`/trip/${trip.id}/itinerary`}
-                                                        className="rounded-lg gradient-bg px-4 py-2 text-xs font-semibold text-white shadow-sm hover:shadow-md transition-all"
+                                                        className="btn-brutal text-xs px-4 py-2"
                                                     >
-                                                        View Itinerary →
+                                                        VIEW ITINERARY ↗
                                                     </Link>
                                                 </div>
                                             </div>
@@ -266,17 +261,17 @@ export default function DashboardClient({ trips: initialTrips }: DashboardClient
                                                         {trip.submitted_count} / {trip.member_count}
                                                     </span>
                                                 </div>
-                                                <div className="h-2 rounded-full bg-border overflow-hidden">
+                                                <div className="h-2 bg-border overflow-hidden">
                                                     <div
-                                                        className="h-full rounded-full bg-amber-500 transition-all duration-500"
+                                                        className="h-full bg-foreground transition-all duration-500"
                                                         style={{
                                                             width: `${trip.member_count > 0 ? (trip.submitted_count / trip.member_count) * 100 : 0}%`,
                                                         }}
                                                     />
                                                 </div>
                                                 {trip.submitted_count === trip.member_count && trip.member_count > 0 && (
-                                                    <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-1.5 font-medium">
-                                                        ✅ Everyone&apos;s in — ready to plan!
+                                                    <p className="text-xs text-foreground mt-1.5 font-black uppercase">
+                                                        ✓ EVERYONE&apos;S IN — READY TO PLAN
                                                     </p>
                                                 )}
                                             </div>
@@ -299,11 +294,11 @@ export default function DashboardClient({ trips: initialTrips }: DashboardClient
                     />
 
                     {/* Modal */}
-                    <div className="relative w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-2xl animate-fade-in">
+                    <div className="relative w-full max-w-md border-4 border-foreground bg-card p-6 animate-fade-in">
                         <div className="flex items-center gap-3 mb-4">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-50 dark:bg-red-950/30">
+                            <div className="flex h-10 w-10 items-center justify-center border-2 border-foreground">
                                 <svg
-                                    className="h-5 w-5 text-red-500"
+                                    className="h-5 w-5 text-foreground"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -316,8 +311,8 @@ export default function DashboardClient({ trips: initialTrips }: DashboardClient
                                     />
                                 </svg>
                             </div>
-                            <h2 className="text-lg font-semibold text-foreground">
-                                Delete Trip
+                            <h2 className="text-lg font-black uppercase tracking-tight text-foreground">
+                                DELETE TRIP
                             </h2>
                         </div>
 
@@ -334,14 +329,14 @@ export default function DashboardClient({ trips: initialTrips }: DashboardClient
                             <button
                                 onClick={() => setDeleteTarget(null)}
                                 disabled={deleting}
-                                className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-card-hover transition-all disabled:opacity-50"
+                                className="btn-brutal-outline text-sm px-4 py-2 disabled:opacity-50"
                             >
-                                Cancel
+                                CANCEL
                             </button>
                             <button
                                 onClick={handleDelete}
                                 disabled={deleting}
-                                className="rounded-lg bg-red-500 px-4 py-2 text-sm font-semibold text-white hover:bg-red-600 transition-all disabled:opacity-50 flex items-center gap-2"
+                                className="btn-brutal text-sm px-4 py-2 disabled:opacity-50 flex items-center gap-2"
                             >
                                 {deleting ? (
                                     <>
@@ -349,10 +344,10 @@ export default function DashboardClient({ trips: initialTrips }: DashboardClient
                                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                                         </svg>
-                                        Deleting…
+                                        DELETING…
                                     </>
                                 ) : (
-                                    "Delete Trip"
+                                    "DELETE TRIP"
                                 )}
                             </button>
                         </div>

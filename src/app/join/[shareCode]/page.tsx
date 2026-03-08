@@ -24,12 +24,12 @@ export default async function JoinPage({ params }: JoinPageProps) {
         return (
             <div className="min-h-screen pt-24 pb-16 page-transition">
                 <div className="mx-auto max-w-lg px-4 text-center">
-                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50 text-3xl">
-                        😕
+                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center border-4 border-foreground text-3xl font-black">
+                        ?
                     </div>
-                    <h1 className="text-2xl font-bold text-foreground">Trip Not Found</h1>
-                    <p className="mt-2 text-muted">
-                        The share code <span className="font-mono font-bold">{shareCode}</span> doesn&apos;t match any trip. Check the link and try again.
+                    <h1 className="text-2xl font-black uppercase tracking-tight text-foreground">Trip Not Found</h1>
+                    <p className="mt-2 text-sm text-muted font-medium">
+                        The share code <span className="font-mono font-black">{shareCode}</span> doesn&apos;t match any trip. Check the link and try again.
                     </p>
                 </div>
             </div>

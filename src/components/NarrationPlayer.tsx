@@ -194,23 +194,23 @@ export default function NarrationPlayer({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-lg">
-            <div className="mx-auto w-full max-w-2xl rounded-2xl border border-border bg-card p-8 shadow-2xl mx-4 max-h-[90vh] flex flex-col">
+            <div className="mx-auto w-full max-w-2xl border-4 border-foreground bg-card p-8 mx-4 max-h-[90vh] flex flex-col">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full gradient-bg text-white text-lg">
-                            🔊
+                        <div className="flex h-10 w-10 items-center justify-center border-2 border-foreground bg-foreground text-background text-lg">
+                            ♬
                         </div>
                         <div>
-                            <h2 className="font-semibold text-foreground">Trip Narration</h2>
+                            <h2 className="font-black uppercase tracking-tight text-foreground">TRIP NARRATION</h2>
                             <p className="text-xs text-muted">📍 {destination}</p>
                         </div>
                     </div>
                     <button
                         onClick={onClose}
-                        className="rounded-lg border border-border px-3 py-1.5 text-sm font-medium text-foreground hover:bg-card-hover transition-all"
+                        className="border-2 border-foreground px-3 py-1.5 text-sm font-black uppercase text-foreground hover:bg-foreground hover:text-background transition-colors"
                     >
-                        ✕ Close
+                        ✕ CLOSE
                     </button>
                 </div>
 
@@ -218,15 +218,14 @@ export default function NarrationPlayer({
                 {scriptLoading && (
                     <div className="flex-1 flex flex-col items-center justify-center gap-4 py-12">
                         <div className="relative">
-                            <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping" />
-                            <div className="relative flex h-16 w-16 items-center justify-center rounded-full gradient-bg text-white text-2xl">
-                                ✨
+                            <div className="relative flex h-16 w-16 items-center justify-center border-4 border-foreground bg-foreground text-background text-2xl animate-pulse">
+                                ✹
                             </div>
                         </div>
-                        <p className="text-sm text-muted">
-                            Writing your trip narration...
+                        <p className="text-sm font-bold uppercase text-muted">
+                            WRITING YOUR TRIP NARRATION...
                         </p>
-                        <p className="text-xs text-muted/60">This may take 10-15 seconds</p>
+                        <p className="text-xs font-bold uppercase text-muted/60">THIS MAY TAKE 2-3 MINUTES. GOOD THINGS TAKE TIME.</p>
                     </div>
                 )}
 
@@ -237,9 +236,9 @@ export default function NarrationPlayer({
                         <p className="text-sm text-danger text-center">{error}</p>
                         <button
                             onClick={generateNarration}
-                            className="rounded-lg gradient-bg px-4 py-2 text-sm font-medium text-white"
+                            className="btn-brutal text-sm px-4 py-2"
                         >
-                            Try Again
+                            TRY AGAIN
                         </button>
                     </div>
                 )}
@@ -249,22 +248,22 @@ export default function NarrationPlayer({
                     <>
                         {/* Audio player or loading indicator */}
                         {audioReady ? (
-                            <div className="rounded-xl border border-border bg-card-hover p-4 mb-4">
+                            <div className="border-2 border-foreground bg-card-hover p-4 mb-4">
                                 <div className="flex items-center gap-3">
                                     <button
                                         onClick={togglePlay}
-                                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full gradient-bg text-white text-lg shadow-md hover:shadow-lg hover:scale-105 transition-all active:scale-95"
+                                        className="flex h-12 w-12 shrink-0 items-center justify-center border-2 border-foreground bg-foreground text-background text-lg hover:bg-background hover:text-foreground transition-colors"
                                     >
                                         {playing ? "⏸" : "▶️"}
                                     </button>
 
                                     <div className="flex-1">
                                         <div
-                                            className="h-2 rounded-full bg-border cursor-pointer overflow-hidden"
+                                            className="h-2 bg-border cursor-pointer overflow-hidden"
                                             onClick={seekTo}
                                         >
                                             <div
-                                                className="h-full rounded-full gradient-bg transition-all duration-100"
+                                                className="h-full bg-foreground transition-all duration-100"
                                                 style={{
                                                     width: `${duration ? (progress / duration) * 100 : 0}%`,
                                                 }}

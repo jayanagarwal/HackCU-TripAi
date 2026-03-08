@@ -337,7 +337,7 @@ export default function VoiceConversation({
     if (!supported) {
         return (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-lg">
-                <div className="mx-auto max-w-md rounded-2xl border border-border bg-card p-8 text-center">
+                <div className="mx-auto max-w-md border-4 border-foreground bg-card p-8 text-center">
                     <div className="text-5xl mb-4">🎙️</div>
                     <h2 className="text-xl font-bold text-foreground mb-2">
                         Voice Input Requires Chrome
@@ -349,9 +349,9 @@ export default function VoiceConversation({
                     </p>
                     <button
                         onClick={onClose}
-                        className="rounded-xl gradient-bg px-6 py-3 font-semibold text-white"
+                        className="btn-brutal px-6 py-3"
                     >
-                        Use Form Instead
+                        USE FORM INSTEAD
                     </button>
                 </div>
             </div>
@@ -363,12 +363,12 @@ export default function VoiceConversation({
             {/* Header */}
             <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
                 <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full gradient-bg text-white text-lg">
-                        🎙️
+                    <div className="flex h-10 w-10 items-center justify-center border-2 border-white bg-white text-black text-lg">
+                        ♬
                     </div>
                     <div>
-                        <h2 className="font-semibold text-white">
-                            TripSync Voice Assistant
+                        <h2 className="font-black uppercase tracking-tight text-white">
+                            VOICE ASSISTANT
                         </h2>
                         <p className="text-xs text-white/50">
                             {phase === "speaking" && "AI is speaking..."}

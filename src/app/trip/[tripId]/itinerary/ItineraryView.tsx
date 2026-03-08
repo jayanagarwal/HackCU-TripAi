@@ -87,16 +87,16 @@ interface ItineraryViewProps {
 }
 
 const typeColors: Record<string, { bg: string; border: string; text: string; label: string }> = {
-    group: { bg: "bg-blue-50", border: "border-blue-200", text: "text-blue-700", label: "👥 Group" },
-    solo: { bg: "bg-violet-50", border: "border-violet-200", text: "text-violet-700", label: "🧍 Solo" },
-    subgroup: { bg: "bg-teal-50", border: "border-teal-200", text: "text-teal-700", label: "👫 Subgroup" },
+    group: { bg: "bg-background", border: "border-foreground", text: "text-foreground", label: "■ Group" },
+    solo: { bg: "bg-background", border: "border-foreground", text: "text-foreground", label: "○ Solo" },
+    subgroup: { bg: "bg-background", border: "border-foreground", text: "text-foreground", label: "◑ Subgroup" },
 };
 
 const categoryIcons: Record<string, string> = {
-    food: "🍽️",
-    activity: "🎯",
-    transportation: "🚗",
-    free: "🌟",
+    food: "∷",
+    activity: "✹",
+    transportation: "→",
+    free: "○",
 };
 
 export default function ItineraryView({
@@ -135,78 +135,78 @@ export default function ItineraryView({
             : [];
 
     return (
-        <div className="min-h-screen pb-16 page-transition">
+        <div className="min-h-screen pt-16 pb-16 page-transition">
             {/* Sticky header — below navbar */}
-            <div className="sticky top-16 z-30 border-b border-border bg-card/95 backdrop-blur-md">
+            <div className="sticky top-16 z-30 border-b-4 border-foreground bg-background">
                 <div className="mx-auto max-w-4xl px-4 py-3 sm:px-6">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-lg font-bold text-foreground">{trip.name}</h1>
-                            <p className="text-xs text-muted">
-                                📍 {destination} · {trip.trip_duration_days || days.length} days
+                            <h1 className="text-lg font-black uppercase tracking-tight text-foreground">{trip.name}</h1>
+                            <p className="text-xs text-muted font-bold">
+                                ⌖ {destination} · {trip.trip_duration_days || days.length} days
                             </p>
                         </div>
                         <Link
                             href={`/trip/${trip.id}/status`}
-                            className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-card-hover transition-all"
+                            className="border-2 border-foreground px-3 py-1.5 text-xs font-black uppercase text-foreground hover:bg-foreground hover:text-background transition-all"
                         >
                             ← Back
                         </Link>
                         <button
                             onClick={() => setShowNarration(true)}
-                            className="rounded-lg gradient-bg px-3 py-1.5 text-xs font-medium text-white hover:shadow-md transition-all"
+                            className="border-2 border-foreground bg-foreground text-background px-3 py-1.5 text-xs font-black uppercase hover:bg-background hover:text-foreground transition-all"
                         >
-                            🔊 Listen
+                            ♪ Listen
                         </button>
                     </div>
 
                     {/* Group / My Schedule toggle */}
                     {currentUserName && (
-                        <div className="mt-2 flex items-center gap-1">
-                            <div className="inline-flex rounded-lg border border-border p-0.5 bg-card-hover">
+                        <div className="mt-2 flex items-center gap-0">
+                            <div className="inline-flex border-2 border-foreground">
                                 <button
                                     onClick={() => setViewMode("group")}
-                                    className={`rounded-md px-3 py-1 text-xs font-medium transition-all ${
+                                    className={`px-3 py-1 text-xs font-black uppercase transition-all ${
                                         viewMode === "group"
-                                            ? "gradient-bg text-white shadow-sm"
-                                            : "text-muted hover:text-foreground"
+                                            ? "bg-foreground text-background"
+                                            : "text-foreground hover:bg-foreground hover:text-background"
                                     }`}
                                 >
-                                    👥 Group View
+                                    ■ Group
                                 </button>
                                 <button
                                     onClick={() => setViewMode("my")}
-                                    className={`rounded-md px-3 py-1 text-xs font-medium transition-all ${
+                                    className={`px-3 py-1 text-xs font-black uppercase border-l-2 border-foreground transition-all ${
                                         viewMode === "my"
-                                            ? "bg-violet-500 text-white shadow-sm"
-                                            : "text-muted hover:text-foreground"
+                                            ? "bg-foreground text-background"
+                                            : "text-foreground hover:bg-foreground hover:text-background"
                                     }`}
                                 >
-                                    🧍 My Schedule
+                                    ○ My Schedule
                                 </button>
                             </div>
                             <Link
                                 href={`/trip/${trip.id}/budget`}
-                                className="ml-auto rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-card-hover transition-all"
+                                className="ml-auto border-2 border-foreground px-3 py-1.5 text-xs font-black uppercase text-foreground hover:bg-foreground hover:text-background transition-all"
                             >
-                                💰 My Budget
+                                $ Budget
                             </Link>
                         </div>
                     )}
 
                     {/* Day tabs */}
-                    <div className="mt-2 flex gap-1 overflow-x-auto pb-1 -mx-1 px-1">
+                    <div className="mt-2 flex gap-0 overflow-x-auto pb-1 -mx-1 px-1">
                         <button
                             onClick={() => setActiveDay(-3)}
-                            className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${activeDay === -3 ? "gradient-bg text-white shadow-sm" : "text-muted hover:bg-card-hover"}`}
+                            className={`shrink-0 px-3 py-1.5 text-xs font-black uppercase border-2 border-foreground transition-all ${activeDay === -3 ? "bg-foreground text-background" : "text-foreground hover:bg-foreground hover:text-background"}`}
                         >
-                            📋 Overview
+                            Overview
                         </button>
                         {days.map((day, i) => (
                             <button
                                 key={i}
                                 onClick={() => setActiveDay(i)}
-                                className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${activeDay === i ? "gradient-bg text-white shadow-sm" : "text-muted hover:bg-card-hover"}`}
+                                className={`shrink-0 px-3 py-1.5 text-xs font-black uppercase border-2 border-foreground -ml-0.5 transition-all ${activeDay === i ? "bg-foreground text-background" : "text-foreground hover:bg-foreground hover:text-background"}`}
                             >
                                 Day {day.day_number}
                             </button>
@@ -214,9 +214,9 @@ export default function ItineraryView({
                         {budgetSummary && (
                             <button
                                 onClick={() => setActiveDay(-2)}
-                                className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${activeDay === -2 ? "gradient-bg text-white shadow-sm" : "text-muted hover:bg-card-hover"}`}
+                                className={`shrink-0 px-3 py-1.5 text-xs font-black uppercase border-2 border-foreground -ml-0.5 transition-all ${activeDay === -2 ? "bg-foreground text-background" : "text-foreground hover:bg-foreground hover:text-background"}`}
                             >
-                                💰 Budget
+                                $ Budget
                             </button>
                         )}
                     </div>
@@ -227,19 +227,19 @@ export default function ItineraryView({
                 {/* Overview tab — Transportation + Accommodation */}
                 {activeDay === -3 && (
                     <div className="animate-fade-in space-y-6">
-                        <h2 className="text-2xl font-bold text-foreground">Trip Overview</h2>
+                        <h2 className="text-2xl font-black uppercase tracking-tighter text-foreground">Trip Overview</h2>
 
                         {/* Transportation */}
                         {transportation && (
-                            <div className="rounded-2xl border border-border bg-card p-6">
-                                <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                                    {transportation.type === "flight" ? "✈️" : transportation.type === "drive" ? "🚗" : "🚗✈️"} Getting There
+                            <div className="border-4 border-foreground p-6">
+                                <h3 className="text-lg font-black uppercase tracking-tight text-foreground">
+                                    {transportation.type === "flight" ? "↑" : transportation.type === "drive" ? "→" : "→↑"} Getting There
                                 </h3>
-                                <div className="mt-3 flex gap-3">
-                                    <span className="rounded-full bg-indigo-50 border border-indigo-200 px-3 py-1 text-xs font-medium text-indigo-700 capitalize">
+                                <div className="mt-3 flex gap-0">
+                                    <span className="border-2 border-foreground px-3 py-1 text-xs font-black uppercase">
                                         {transportation.type}
                                     </span>
-                                    <span className="rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-xs font-medium text-emerald-700">
+                                    <span className="border-2 border-foreground -ml-0.5 px-3 py-1 text-xs font-black bg-foreground text-background">
                                         ~${transportation.estimated_cost_pp}/person
                                     </span>
                                 </div>
@@ -250,41 +250,39 @@ export default function ItineraryView({
                         {/* Accommodation Options */}
                         {accommodationOptions.length > 0 && (
                             <div>
-                                <h3 className="text-lg font-semibold text-foreground mb-3">🏨 Where to Stay</h3>
-                                <div className="space-y-3">
+                                <h3 className="text-lg font-black uppercase tracking-tight text-foreground mb-3">□ Where to Stay</h3>
+                                <div className="space-y-0">
                                     {accommodationOptions.map((option, i) => (
                                         <div
                                             key={i}
-                                            className={`rounded-xl border p-4 transition-all ${accommodation?.recommended === option.name
-                                                ? "border-emerald-300 bg-emerald-50/50 ring-1 ring-emerald-200"
-                                                : "border-border bg-card"
-                                                }`}
+                                            className={`border-4 border-foreground p-4 -mt-1 first:mt-0 ${
+                                                accommodation?.recommended === option.name
+                                                    ? "bg-foreground text-background"
+                                                    : ""
+                                            }`}
                                         >
                                             <div className="flex items-start justify-between">
                                                 <div>
                                                     <div className="flex items-center gap-2">
-                                                        <h4 className="font-semibold text-foreground">{option.name}</h4>
+                                                        <h4 className="font-black">{option.name}</h4>
                                                         {accommodation?.recommended === option.name && (
-                                                            <span className="rounded-full bg-emerald-100 border border-emerald-300 px-2 py-0.5 text-[10px] font-medium text-emerald-700">
-                                                                ⭐ Top Pick
+                                                            <span className="border-2 border-current px-2 py-0.5 text-[10px] font-black uppercase">
+                                                                ✹ Top Pick
                                                             </span>
                                                         )}
                                                         {option.confidence && (
-                                                            <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${option.confidence === "verified"
-                                                                ? "bg-blue-50 border border-blue-200 text-blue-700"
-                                                                : "bg-amber-50 border border-amber-200 text-amber-700"
-                                                                }`}>
-                                                                {option.confidence === "verified" ? "✓ Verified" : "💡 Suggested"}
+                                                            <span className="border px-2 py-0.5 text-[10px] font-bold border-current">
+                                                                {option.confidence === "verified" ? "✓ Verified" : "? Suggested"}
                                                             </span>
                                                         )}
                                                     </div>
-                                                    <span className="text-xs text-muted capitalize">{option.type}</span>
+                                                    <span className="text-xs opacity-70 uppercase font-bold">{option.type}</span>
                                                 </div>
-                                                <span className="shrink-0 text-base font-bold gradient-text">
+                                                <span className="shrink-0 text-base font-black">
                                                     ${option.cost_per_night}/night
                                                 </span>
                                             </div>
-                                            <p className="mt-2 text-sm text-foreground/70">{option.reasoning}</p>
+                                            <p className="mt-2 text-sm opacity-70">{option.reasoning}</p>
                                         </div>
                                     ))}
                                 </div>
@@ -324,10 +322,10 @@ export default function ItineraryView({
                     return (
                     <div className="animate-fade-in">
                         <div className="mb-6">
-                            <h2 className="text-2xl font-bold text-foreground">
+                            <h2 className="text-2xl font-black uppercase tracking-tighter text-foreground">
                                 Day {days[activeDay].day_number}: {days[activeDay].theme}
                             </h2>
-                            <p className="text-sm text-muted mt-1">{days[activeDay].date}</p>
+                            <p className="text-sm text-muted font-bold mt-1">{days[activeDay].date}</p>
                         </div>
 
                         {/* Leaflet Map */}
@@ -336,11 +334,11 @@ export default function ItineraryView({
                                 <DayMap stops={mapStops} highlightedIndex={hoveredStop} />
 
                                 {/* Legend chips */}
-                                <div className="flex flex-wrap gap-2">
+                                <div className="flex flex-wrap gap-0">
                                     {mapStops.map((stop, i) => (
                                         <span
                                             key={i}
-                                            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1 text-xs font-medium text-foreground shadow-sm"
+                                            className="inline-flex items-center gap-1.5 border-2 border-foreground -ml-0.5 first:ml-0 -mt-0.5 first:mt-0 px-2.5 py-1 text-xs font-bold text-foreground"
                                         >
                                             <span
                                                 style={{
@@ -370,9 +368,9 @@ export default function ItineraryView({
                                         href={fullRouteUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-2 text-sm font-medium text-foreground hover:bg-card-hover transition-all shadow-sm"
+                                        className="inline-flex items-center gap-2 border-4 border-foreground px-4 py-2 text-sm font-black uppercase text-foreground hover:bg-foreground hover:text-background transition-all"
                                     >
-                                        🗺️ Open Full Route in Google Maps
+                                        ↗ Open Full Route in Google Maps
                                     </a>
                                 )}
                             </div>
@@ -380,7 +378,7 @@ export default function ItineraryView({
 
                         {/* Timeline */}
                         <div className="relative">
-                            <div className="absolute left-5 top-0 bottom-0 w-px bg-border" />
+                            <div className="absolute left-5 top-0 bottom-0 w-1 bg-foreground" />
 
                             <div className="space-y-4">
                                 {days[activeDay].activities.filter(isMyActivity).map((activity, i) => {
@@ -390,10 +388,10 @@ export default function ItineraryView({
                                         (activity.type === "solo" || activity.type === "subgroup");
                                     const typeStyle = isPersonalActivity
                                         ? {
-                                              bg: "bg-violet-50 dark:bg-violet-950/30",
-                                              border: "border-violet-300 dark:border-violet-500/40",
-                                              text: "text-violet-700 dark:text-violet-300",
-                                              label: activity.type === "solo" ? "🧍 Just You" : "👫 Subgroup",
+                                              bg: "bg-foreground/5",
+                                              border: "border-foreground",
+                                              text: "text-foreground",
+                                              label: activity.type === "solo" ? "○ Just You" : "◑ Subgroup",
                                           }
                                         : typeColors[activity.type] || typeColors.group;
                                     const reasoningKey = `${activeDay}-${i}`;
@@ -408,44 +406,41 @@ export default function ItineraryView({
                                         >
                                             {/* Timeline dot */}
                                             <div
-                                                className={`relative z-10 mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-lg ${typeStyle.bg} ${typeStyle.border} border`}
+                                                className="relative z-10 mt-1 flex h-10 w-10 shrink-0 items-center justify-center border-4 border-foreground bg-background text-lg font-black"
                                             >
-                                                {categoryIcons[activity.category] || "📌"}
+                                                {categoryIcons[activity.category] || "●"}
                                             </div>
 
                                             {/* Card */}
                                             <div
-                                                className={`flex-1 rounded-xl border ${typeStyle.border} ${typeStyle.bg} p-4 transition-all hover:shadow-sm`}
+                                                className="flex-1 border-4 border-foreground p-4 transition-all hover:bg-foreground/5"
                                             >
                                                 <div className="flex items-start justify-between gap-2">
                                                     <div className="flex-1 min-w-0">
                                                         <div className="flex flex-wrap items-center gap-2">
-                                                            <span className="text-xs font-medium text-muted">
+                                                            <span className="text-xs font-black text-foreground">
                                                                 {activity.time}
                                                             </span>
                                                             <span
-                                                                className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${typeStyle.text} ${typeStyle.bg} border ${typeStyle.border}`}
+                                                                className="border-2 border-foreground px-2 py-0.5 text-[10px] font-black uppercase"
                                                             >
                                                                 {typeStyle.label}
                                                             </span>
                                                             {activity.confidence && (
-                                                                <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${activity.confidence === "verified"
-                                                                    ? "bg-blue-50/80 border border-blue-200 text-blue-600"
-                                                                    : "bg-amber-50/80 border border-amber-200 text-amber-600"
-                                                                    }`}>
-                                                                    {activity.confidence === "verified" ? "✓" : "💡"}
+                                                                <span className="border border-foreground px-2 py-0.5 text-[10px] font-bold">
+                                                                    {activity.confidence === "verified" ? "✓" : "?"}
                                                                 </span>
                                                             )}
                                                         </div>
-                                                        <h3 className="mt-1 font-semibold text-foreground">
+                                                        <h3 className="mt-1 font-black text-foreground">
                                                             {activity.name}
                                                         </h3>
                                                         <p className="mt-0.5 text-sm text-foreground/70">
                                                             {activity.description}
                                                         </p>
                                                         {activity.dietary_notes && (
-                                                            <p className="mt-1 text-xs text-emerald-600">
-                                                                🥗 {activity.dietary_notes}
+                                                            <p className="mt-1 text-xs font-bold text-foreground">
+                                                                ∷ {activity.dietary_notes}
                                                             </p>
                                                         )}
                                                         {activity.mapQuery && (
@@ -453,25 +448,25 @@ export default function ItineraryView({
                                                                 href={`https://www.google.com/maps/search/?api=1&query=${activity.mapQuery}`}
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
-                                                                className="mt-1 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                                                                className="mt-1 inline-flex items-center gap-1 text-xs font-black text-foreground underline"
                                                             >
-                                                                📍 View on Maps
+                                                                ⌖ View on Maps
                                                             </a>
                                                         )}
                                                     </div>
                                                     {activity.estimated_cost_pp > 0 && (
-                                                        <span className="shrink-0 rounded-lg bg-white/80 border border-border px-2 py-1 text-xs font-medium text-foreground">
+                                                        <span className="shrink-0 border-2 border-foreground px-2 py-1 text-xs font-black">
                                                             ${activity.estimated_cost_pp}/pp
                                                         </span>
                                                     )}
                                                 </div>
 
                                                 {/* Participants */}
-                                                <div className="mt-3 flex flex-wrap gap-1.5">
+                                                <div className="mt-3 flex flex-wrap gap-0">
                                                     {activity.participants.map((p, j) => (
                                                         <span
                                                             key={j}
-                                                            className="rounded-full bg-white/80 border border-border px-2 py-0.5 text-[11px] font-medium text-foreground"
+                                                            className="border-2 border-foreground -ml-0.5 first:ml-0 px-2 py-0.5 text-[11px] font-bold text-foreground"
                                                         >
                                                             {p}
                                                         </span>
@@ -484,13 +479,13 @@ export default function ItineraryView({
                                                         onClick={() =>
                                                             setExpandedReasoning(isExpanded ? null : reasoningKey)
                                                         }
-                                                        className="mt-2 flex items-center gap-1 text-[11px] font-medium text-primary hover:underline"
+                                                        className="mt-2 flex items-center gap-1 text-[11px] font-black text-foreground underline uppercase"
                                                     >
-                                                        💡 {isExpanded ? "Hide reasoning" : "Why this?"}
+                                                        {isExpanded ? "Hide reasoning" : "Why this?"}
                                                     </button>
                                                 )}
                                                 {isExpanded && activity.reasoning && (
-                                                    <p className="mt-2 rounded-lg bg-white/60 border border-border p-3 text-xs text-foreground/70 animate-fade-in">
+                                                    <p className="mt-2 border-2 border-foreground p-3 text-xs text-foreground/70 animate-fade-in">
                                                         {activity.reasoning}
                                                     </p>
                                                 )}
@@ -505,8 +500,8 @@ export default function ItineraryView({
                         {viewMode === "my" &&
                             days[activeDay].activities.filter(isMyActivity).length === 0 && (
                                 <div className="text-center py-12 text-muted">
-                                    <p className="text-3xl mb-2">🏖️</p>
-                                    <p className="text-sm">No scheduled activities for you this day — free time!</p>
+                                    <p className="text-3xl mb-2 font-black">○</p>
+                                    <p className="text-sm font-bold">No scheduled activities for you this day — free time!</p>
                                 </div>
                             )}
                     </div>
@@ -516,11 +511,11 @@ export default function ItineraryView({
                 {/* Budget view */}
                 {activeDay === -2 && budgetSummary && (
                     <div className="animate-fade-in">
-                        <h2 className="text-2xl font-bold text-foreground mb-2">
-                            💰 Budget Breakdown
+                        <h2 className="text-2xl font-black uppercase tracking-tighter text-foreground mb-2">
+                            Budget Breakdown
                         </h2>
                         <p className="text-sm text-muted mb-6">
-                            Group total: <span className="font-semibold text-foreground">${budgetSummary.group_total?.toLocaleString()}</span>
+                            Group total: <span className="font-black text-foreground">${budgetSummary.group_total?.toLocaleString()}</span>
                         </p>
 
                         {/* Budget warning banner */}
@@ -530,15 +525,15 @@ export default function ItineraryView({
                             );
                             if (overBudgetMembers.length === 0) return null;
                             return (
-                                <div className="mb-6 rounded-xl border-2 border-amber-300 bg-amber-50 px-4 py-3">
-                                    <p className="text-sm font-semibold text-amber-900">
-                                        ⚠️ Heads up — this plan may exceed some budgets
+                                <div className="mb-6 border-4 border-foreground px-4 py-3">
+                                    <p className="text-sm font-black uppercase text-foreground">
+                                        ! Heads up — this plan may exceed some budgets
                                     </p>
                                     <div className="mt-2 space-y-1">
                                         {overBudgetMembers.map(([name, b]) => {
                                             const overBy = b.total - memberBudgets[name];
                                             return (
-                                                <p key={name} className="text-xs text-amber-800">
+                                                <p key={name} className="text-xs text-foreground/70">
                                                     {name}'s estimate (${b.total.toLocaleString()}) is ${overBy.toLocaleString()} over their ${memberBudgets[name].toLocaleString()} budget
                                                 </p>
                                             );
@@ -548,59 +543,55 @@ export default function ItineraryView({
                             );
                         })()}
 
-                        <div className="grid gap-4 sm:grid-cols-2">
+                        <div className="grid gap-0 sm:grid-cols-2">
                             {Object.entries(budgetSummary.per_person || {}).map(
                                 ([name, budget]) => {
                                     const stated = memberBudgets[name];
-                                    let budgetColor = "border-border";
-                                    let barColor = "gradient-bg";
+                                    let borderStyle = "";
+                                    let barColor = "bg-foreground";
                                     let statusLabel = "";
-                                    let statusClass = "";
 
                                     if (stated != null) {
                                         const ratio = budget.total / stated;
                                         if (ratio > 1) {
-                                            budgetColor = "border-red-300 ring-1 ring-red-200";
-                                            barColor = "bg-red-500";
+                                            borderStyle = "border-4";
+                                            barColor = "bg-foreground";
                                             statusLabel = `$${(budget.total - stated).toLocaleString()} over budget`;
-                                            statusClass = "text-red-600";
                                         } else if (ratio > 0.9) {
-                                            budgetColor = "border-amber-300 ring-1 ring-amber-200";
-                                            barColor = "bg-amber-500";
+                                            borderStyle = "border-4";
+                                            barColor = "bg-foreground";
                                             statusLabel = "Within 10% of budget";
-                                            statusClass = "text-amber-600";
                                         } else {
-                                            budgetColor = "border-emerald-300 ring-1 ring-emerald-200";
-                                            barColor = "bg-emerald-500";
+                                            borderStyle = "border-4";
+                                            barColor = "bg-foreground";
                                             statusLabel = `$${(stated - budget.total).toLocaleString()} under budget`;
-                                            statusClass = "text-emerald-600";
                                         }
                                     }
 
                                     return (
                                         <div
                                             key={name}
-                                            className={`rounded-xl border bg-card p-4 ${budgetColor}`}
+                                            className={`border-4 border-foreground p-4 -mt-1 -ml-1`}
                                         >
-                                            <h3 className="font-semibold text-foreground">{name}</h3>
-                                            <p className="text-xl font-bold gradient-text mt-1">
+                                            <h3 className="font-black uppercase text-foreground">{name}</h3>
+                                            <p className="text-xl font-black text-foreground mt-1">
                                                 ${budget.total?.toLocaleString()}
                                             </p>
 
                                             {/* Budget bar */}
                                             {stated != null && (
                                                 <div className="mt-2">
-                                                    <div className="flex justify-between text-[10px] text-muted mb-1">
+                                                    <div className="flex justify-between text-[10px] font-bold text-muted uppercase mb-1">
                                                         <span>Estimated</span>
                                                         <span>Budget: ${stated.toLocaleString()}</span>
                                                     </div>
-                                                    <div className="h-2 rounded-full bg-border overflow-hidden">
+                                                    <div className="h-3 border-2 border-foreground overflow-hidden">
                                                         <div
-                                                            className={`h-full rounded-full transition-all ${barColor}`}
+                                                            className={`h-full transition-all ${barColor}`}
                                                             style={{ width: `${Math.min((budget.total / stated) * 100, 100)}%` }}
                                                         />
                                                     </div>
-                                                    <p className={`text-[10px] font-medium mt-1 ${statusClass}`}>
+                                                    <p className="text-[10px] font-black mt-1 text-foreground">
                                                         {statusLabel}
                                                     </p>
                                                 </div>
@@ -608,17 +599,17 @@ export default function ItineraryView({
 
                                             <div className="mt-3 space-y-2">
                                                 {[
-                                                    { label: "🏨 Accommodation", value: budget.accommodation },
-                                                    { label: "🍽️ Food", value: budget.food },
-                                                    { label: "🎯 Activities", value: budget.activities },
-                                                    { label: "🚗 Transportation", value: budget.transportation },
+                                                    { label: "□ Accommodation", value: budget.accommodation },
+                                                    { label: "∷ Food", value: budget.food },
+                                                    { label: "✹ Activities", value: budget.activities },
+                                                    { label: "→ Transportation", value: budget.transportation },
                                                 ].map((item) => (
                                                     <div
                                                         key={item.label}
                                                         className="flex justify-between text-xs text-muted"
                                                     >
-                                                        <span>{item.label}</span>
-                                                        <span className="font-medium text-foreground">
+                                                        <span className="font-bold">{item.label}</span>
+                                                        <span className="font-black text-foreground">
                                                             ${item.value?.toLocaleString() || 0}
                                                         </span>
                                                     </div>

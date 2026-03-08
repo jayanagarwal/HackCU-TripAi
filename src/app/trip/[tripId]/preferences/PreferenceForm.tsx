@@ -7,13 +7,13 @@ const VoiceConversation = lazy(() => import("@/components/VoiceConversation"));
 
 // ── Vibe config ──
 const vibes = [
-    { key: "vibe_beach", emoji: "🏖️", label: "Beach & Water" },
-    { key: "vibe_city", emoji: "🏙️", label: "City & Urban" },
-    { key: "vibe_nature", emoji: "🌲", label: "Nature & Outdoors" },
-    { key: "vibe_culture", emoji: "🎨", label: "Art & Culture" },
-    { key: "vibe_relaxation", emoji: "🧘", label: "Relaxation & Wellness" },
-    { key: "vibe_nightlife", emoji: "🎉", label: "Nightlife & Entertainment" },
-    { key: "vibe_adventure", emoji: "🏔️", label: "Adventure & Sports" },
+    { key: "vibe_beach", symbol: "~", label: "Beach & Water" },
+    { key: "vibe_city", symbol: "□", label: "City & Urban" },
+    { key: "vibe_nature", symbol: "▲", label: "Nature & Outdoors" },
+    { key: "vibe_culture", symbol: "✹", label: "Art & Culture" },
+    { key: "vibe_relaxation", symbol: "○", label: "Relaxation & Wellness" },
+    { key: "vibe_nightlife", symbol: "♪", label: "Nightlife & Entertainment" },
+    { key: "vibe_adventure", symbol: "↑", label: "Adventure & Sports" },
 ] as const;
 
 const dietaryOptions = [
@@ -176,15 +176,15 @@ export default function PreferenceForm({
             <div className="mx-auto max-w-2xl px-4 sm:px-6">
                 {/* Progress bar */}
                 <div className="mb-8">
-                    <div className="flex items-center justify-between text-xs text-muted mb-2">
-                        <span>
+                    <div className="flex items-center justify-between text-xs mb-2">
+                        <span className="font-black uppercase tracking-widest text-foreground">
                             {steps[step]} ({step + 1}/{steps.length})
                         </span>
-                        <span className="font-medium text-foreground">{tripName}</span>
+                        <span className="font-bold text-foreground">{tripName}</span>
                     </div>
-                    <div className="h-2 rounded-full bg-border overflow-hidden">
+                    <div className="h-3 border-2 border-foreground overflow-hidden">
                         <div
-                            className="h-full rounded-full gradient-bg transition-all duration-500 ease-out"
+                            className="h-full bg-foreground transition-all duration-500 ease-out"
                             style={{ width: `${((step + 1) / steps.length) * 100}%` }}
                         />
                     </div>
@@ -193,55 +193,55 @@ export default function PreferenceForm({
                 {/* ── Step 0: Welcome ── */}
                 {step === 0 && (
                     <div className="text-center animate-fade-in">
-                        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-indigo-50 text-4xl">
-                            👋
+                        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center border-4 border-foreground text-4xl font-black">
+                            ✹
                         </div>
-                        <h1 className="text-3xl font-bold text-foreground">
-                            Hey{userName ? `, ${userName.split(" ")[0]}` : ""}!
+                        <h1 className="text-4xl font-black uppercase tracking-tighter text-foreground">
+                            Hey{userName ? `, ${userName.split(" ")[0]}` : ""}
                         </h1>
                         <p className="mt-3 text-lg text-muted max-w-md mx-auto">
                             Let&apos;s figure out your dream trip. This takes about 2 minutes
                             — just tell us what you love.
                         </p>
                         {alreadySubmitted && (
-                            <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
-                                ✏️ You already submitted — editing your preferences
+                            <div className="mt-4 border-2 border-foreground px-4 py-3 text-sm font-bold text-foreground">
+                                You already submitted — editing your preferences
                             </div>
                         )}
 
                         {/* Voice option */}
                         <button
                             onClick={() => setShowVoice(true)}
-                            className="mt-8 w-full max-w-md mx-auto flex items-center gap-3 rounded-2xl border-2 border-dashed border-primary/40 bg-card p-4 text-left transition-all hover:border-primary hover:shadow-md group"
+                            className="mt-8 w-full max-w-md mx-auto flex items-center gap-3 border-4 border-dashed border-foreground p-4 text-left transition-all hover:bg-foreground hover:text-background group"
                         >
-                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl gradient-bg text-white text-xl group-hover:scale-110 transition-transform">
-                                🎙️
+                            <div className="flex h-12 w-12 shrink-0 items-center justify-center border-4 border-foreground text-xl font-black group-hover:bg-background group-hover:text-foreground">
+                                ♪
                             </div>
                             <div>
-                                <div className="font-semibold text-foreground">Prefer to talk?</div>
-                                <div className="text-xs text-muted">Tell our AI about your ideal trip — we&apos;ll fill the form for you</div>
+                                <div className="font-black uppercase text-foreground group-hover:text-background">Prefer to talk?</div>
+                                <div className="text-xs text-muted group-hover:text-background/70">Tell our AI about your ideal trip — we&apos;ll fill the form for you</div>
                             </div>
                         </button>
 
                         <div className="mt-4 flex items-center gap-3 max-w-md mx-auto">
-                            <div className="flex-1 h-px bg-border" />
-                            <span className="text-xs text-muted">or fill out the form</span>
-                            <div className="flex-1 h-px bg-border" />
+                            <div className="flex-1 h-px bg-foreground" />
+                            <span className="text-xs font-bold text-foreground uppercase">or fill out the form</span>
+                            <div className="flex-1 h-px bg-foreground" />
                         </div>
 
                         <button
                             onClick={() => setStep(1)}
-                            className="mt-4 inline-flex items-center gap-2 rounded-full gradient-bg px-8 py-3.5 text-lg font-semibold text-white shadow-lg transition-all hover:shadow-xl hover:scale-105 active:scale-95"
+                            className="mt-4 btn-brutal px-10 py-3.5 text-lg"
                         >
-                            Let&apos;s Go! 🚀
+                            Let&apos;s Go ↗
                         </button>
                     </div>
                 )}
 
                 {/* Voice captured banner */}
                 {voiceCaptured && step === steps.length - 1 && (
-                    <div className="mb-4 rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 animate-fade-in">
-                        🎙️ Here&apos;s what I captured from our chat — review and submit when you&apos;re ready!
+                    <div className="mb-4 border-4 border-foreground bg-foreground text-background px-4 py-3 text-sm font-bold animate-fade-in">
+                        ♪ Here&apos;s what I captured from our chat — review and submit when you&apos;re ready!
                     </div>
                 )}
 
@@ -249,17 +249,17 @@ export default function PreferenceForm({
                 {step === 1 && (
                     <div className="animate-fade-in space-y-8">
                         <div className="text-center">
-                            <h2 className="text-2xl font-bold text-foreground">
-                                💰 What&apos;s your budget?
+                            <h2 className="text-2xl font-black uppercase tracking-tighter text-foreground">
+                                Budget
                             </h2>
                             <p className="mt-2 text-muted">
                                 Total spending for the whole trip (not per day)
                             </p>
                         </div>
 
-                        <div className="rounded-2xl border border-border bg-card p-8">
+                        <div className="border-4 border-foreground p-8">
                             <div className="text-center mb-6">
-                                <span className="text-5xl font-bold gradient-text">
+                                <span className="text-5xl font-black text-foreground">
                                     ${budget.toLocaleString()}
                                 </span>
                             </div>
@@ -270,9 +270,9 @@ export default function PreferenceForm({
                                 step="50"
                                 value={budget}
                                 onChange={(e) => setBudget(parseInt(e.target.value))}
-                                className="w-full accent-[var(--primary)]"
+                                className="w-full"
                             />
-                            <div className="flex justify-between mt-2 text-xs text-muted">
+                            <div className="flex justify-between mt-2 text-xs font-bold text-foreground">
                                 <span>$200</span>
                                 <span>$1500</span>
                                 <span>$3000</span>
@@ -285,25 +285,25 @@ export default function PreferenceForm({
                 {step === 2 && (
                     <div className="animate-fade-in space-y-6">
                         <div className="text-center">
-                            <h2 className="text-2xl font-bold text-foreground">
-                                ✨ Rate your vibes
+                            <h2 className="text-2xl font-black uppercase tracking-tighter text-foreground">
+                                Rate Your Vibes
                             </h2>
                             <p className="mt-2 text-muted">
                                 Drag each slider to show how much you&apos;re into it
                             </p>
                         </div>
 
-                        <div className="space-y-4">
-                            {vibes.map(({ key, emoji, label }) => (
+                        <div className="space-y-0">
+                            {vibes.map(({ key, symbol, label }) => (
                                 <div
                                     key={key}
-                                    className="rounded-xl border border-border bg-card p-4 transition-all hover:border-primary-light"
+                                    className="border-4 border-foreground p-4 -mt-1 first:mt-0"
                                 >
                                     <div className="flex items-center justify-between mb-2">
-                                        <span className="flex items-center gap-2 font-medium text-foreground">
-                                            <span className="text-xl">{emoji}</span> {label}
+                                        <span className="flex items-center gap-2 font-bold text-foreground">
+                                            <span className="text-xl font-black">{symbol}</span> {label}
                                         </span>
-                                        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-sm font-bold text-primary">
+                                        <span className="flex h-8 w-8 items-center justify-center border-2 border-foreground text-sm font-black">
                                             {vibeRatings[key]}
                                         </span>
                                     </div>
@@ -318,11 +318,11 @@ export default function PreferenceForm({
                                                 [key]: parseInt(e.target.value),
                                             })
                                         }
-                                        className="w-full accent-[var(--primary)]"
+                                        className="w-full"
                                     />
-                                    <div className="flex justify-between mt-1 text-[10px] text-muted">
+                                    <div className="flex justify-between mt-1 text-[10px] font-bold text-muted uppercase">
                                         <span>Meh</span>
-                                        <span>Love it!</span>
+                                        <span>Love it</span>
                                     </div>
                                 </div>
                             ))}
@@ -334,8 +334,8 @@ export default function PreferenceForm({
                 {step === 3 && (
                     <div className="animate-fade-in space-y-8">
                         <div className="text-center">
-                            <h2 className="text-2xl font-bold text-foreground">
-                                🍽️ Dietary needs
+                            <h2 className="text-2xl font-black uppercase tracking-tighter text-foreground">
+                                Dietary Needs
                             </h2>
                             <p className="mt-2 text-muted">
                                 Select any restrictions — we&apos;ll make sure restaurants accommodate
@@ -343,7 +343,7 @@ export default function PreferenceForm({
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-2 gap-0">
                             {dietaryOptions.map((option) => (
                                 <button
                                     key={option}
@@ -360,26 +360,28 @@ export default function PreferenceForm({
                                             );
                                         }
                                     }}
-                                    className={`rounded-xl border p-3 text-sm font-medium transition-all ${dietary.includes(option)
-                                        ? "border-primary bg-indigo-50 text-primary shadow-sm"
-                                        : "border-border bg-card text-foreground hover:border-primary-light"
-                                        }`}
+                                    className={`border-4 border-foreground -mt-1 -ml-1 p-3 text-sm font-bold transition-all ${
+                                        dietary.includes(option)
+                                            ? "bg-foreground text-background"
+                                            : "bg-background text-foreground hover:bg-foreground hover:text-background"
+                                    }`}
                                 >
+                                    {dietary.includes(option) ? "✓ " : ""}
                                     {option}
                                 </button>
                             ))}
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-foreground mb-2">
-                                Anything else about food? (optional)
+                            <label className="block text-sm font-black uppercase text-foreground mb-2">
+                                Anything else about food?
                             </label>
                             <textarea
                                 rows={2}
                                 placeholder="e.g., I'm allergic to shellfish, love spicy food..."
                                 value={dietaryNotes}
                                 onChange={(e) => setDietaryNotes(e.target.value)}
-                                className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+                                className="w-full border-4 border-foreground bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted/50 focus:outline-none transition-all resize-none"
                             />
                         </div>
                     </div>
@@ -389,34 +391,34 @@ export default function PreferenceForm({
                 {step === 4 && (
                     <div className="animate-fade-in space-y-8">
                         <div className="text-center">
-                            <h2 className="text-2xl font-bold text-foreground">
-                                🏃 Activity style
+                            <h2 className="text-2xl font-black uppercase tracking-tighter text-foreground">
+                                Activity Style
                             </h2>
                             <p className="mt-2 text-muted">How packed do you want each day?</p>
                         </div>
 
                         {/* Pace */}
                         <div>
-                            <label className="block text-sm font-semibold text-foreground mb-3">
+                            <label className="block text-sm font-black uppercase text-foreground mb-3">
                                 Ideal pace
                             </label>
-                            <div className="grid grid-cols-3 gap-3">
+                            <div className="grid grid-cols-3 gap-0">
                                 {[
                                     {
                                         value: "chill",
-                                        emoji: "😌",
+                                        symbol: "○",
                                         label: "Chill",
                                         desc: "2-3 activities/day",
                                     },
                                     {
                                         value: "moderate",
-                                        emoji: "😊",
+                                        symbol: "◑",
                                         label: "Moderate",
                                         desc: "3-4 activities/day",
                                     },
                                     {
                                         value: "packed",
-                                        emoji: "🤩",
+                                        symbol: "●",
                                         label: "Packed",
                                         desc: "5+ activities/day",
                                     },
@@ -425,14 +427,15 @@ export default function PreferenceForm({
                                         key={option.value}
                                         type="button"
                                         onClick={() => setActivityLevel(option.value)}
-                                        className={`rounded-xl border p-4 text-center transition-all ${activityLevel === option.value
-                                            ? "border-primary bg-indigo-50 text-primary shadow-sm"
-                                            : "border-border bg-card text-foreground hover:border-primary-light"
-                                            }`}
+                                        className={`border-4 border-foreground -ml-1 first:ml-0 p-4 text-center transition-all ${
+                                            activityLevel === option.value
+                                                ? "bg-foreground text-background"
+                                                : "bg-background text-foreground hover:bg-foreground hover:text-background"
+                                        }`}
                                     >
-                                        <div className="text-2xl mb-1">{option.emoji}</div>
-                                        <div className="text-sm font-semibold">{option.label}</div>
-                                        <div className="text-[11px] text-muted mt-0.5">
+                                        <div className="text-2xl mb-1 font-black">{option.symbol}</div>
+                                        <div className="text-sm font-black uppercase">{option.label}</div>
+                                        <div className="text-[11px] opacity-70 mt-0.5">
                                             {option.desc}
                                         </div>
                                     </button>
@@ -442,26 +445,27 @@ export default function PreferenceForm({
 
                         {/* Accommodation */}
                         <div>
-                            <label className="block text-sm font-semibold text-foreground mb-3">
+                            <label className="block text-sm font-black uppercase text-foreground mb-3">
                                 Accommodation preference
                             </label>
-                            <div className="grid grid-cols-3 gap-3">
+                            <div className="grid grid-cols-3 gap-0">
                                 {[
-                                    { value: "budget", emoji: "🏕️", label: "Budget" },
-                                    { value: "mid-range", emoji: "🏨", label: "Mid-range" },
-                                    { value: "luxury", emoji: "✨", label: "Luxury" },
+                                    { value: "budget", symbol: "△", label: "Budget" },
+                                    { value: "mid-range", symbol: "□", label: "Mid-range" },
+                                    { value: "luxury", symbol: "✹", label: "Luxury" },
                                 ].map((option) => (
                                     <button
                                         key={option.value}
                                         type="button"
                                         onClick={() => setAccommodationPref(option.value)}
-                                        className={`rounded-xl border p-4 text-center transition-all ${accommodationPref === option.value
-                                            ? "border-primary bg-indigo-50 text-primary shadow-sm"
-                                            : "border-border bg-card text-foreground hover:border-primary-light"
-                                            }`}
+                                        className={`border-4 border-foreground -ml-1 first:ml-0 p-4 text-center transition-all ${
+                                            accommodationPref === option.value
+                                                ? "bg-foreground text-background"
+                                                : "bg-background text-foreground hover:bg-foreground hover:text-background"
+                                        }`}
                                     >
-                                        <div className="text-2xl mb-1">{option.emoji}</div>
-                                        <div className="text-sm font-semibold">{option.label}</div>
+                                        <div className="text-2xl mb-1 font-black">{option.symbol}</div>
+                                        <div className="text-sm font-black uppercase">{option.label}</div>
                                     </button>
                                 ))}
                             </div>
@@ -469,19 +473,20 @@ export default function PreferenceForm({
 
                         {/* Must-haves */}
                         <div>
-                            <label className="block text-sm font-semibold text-foreground mb-3">
-                                Must-haves ✅
+                            <label className="block text-sm font-black uppercase text-foreground mb-3">
+                                Must-haves ✓
                             </label>
-                            <div className="flex flex-wrap gap-2">
+                            <div className="flex flex-wrap gap-0">
                                 {mustHaveOptions.map((option) => (
                                     <button
                                         key={option}
                                         type="button"
                                         onClick={() => setMustHaves(toggleArray(mustHaves, option))}
-                                        className={`rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all ${mustHaves.includes(option)
-                                            ? "border-emerald-400 bg-emerald-50 text-emerald-700"
-                                            : "border-border bg-card text-foreground hover:border-emerald-300"
-                                            }`}
+                                        className={`border-4 border-foreground -ml-1 -mt-1 px-3.5 py-1.5 text-sm font-bold transition-all ${
+                                            mustHaves.includes(option)
+                                                ? "bg-foreground text-background"
+                                                : "bg-background text-foreground hover:bg-foreground hover:text-background"
+                                        }`}
                                     >
                                         {mustHaves.includes(option) ? "✓ " : ""}
                                         {option}
@@ -492,10 +497,10 @@ export default function PreferenceForm({
 
                         {/* Dealbreakers */}
                         <div>
-                            <label className="block text-sm font-semibold text-foreground mb-3">
-                                Dealbreakers 🚫
+                            <label className="block text-sm font-black uppercase text-foreground mb-3">
+                                Dealbreakers ✗
                             </label>
-                            <div className="flex flex-wrap gap-2">
+                            <div className="flex flex-wrap gap-0">
                                 {dealbreakerOptions.map((option) => (
                                     <button
                                         key={option}
@@ -503,10 +508,11 @@ export default function PreferenceForm({
                                         onClick={() =>
                                             setDealbreakers(toggleArray(dealbreakers, option))
                                         }
-                                        className={`rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all ${dealbreakers.includes(option)
-                                            ? "border-red-400 bg-red-50 text-red-700"
-                                            : "border-border bg-card text-foreground hover:border-red-300"
-                                            }`}
+                                        className={`border-4 border-foreground -ml-1 -mt-1 px-3.5 py-1.5 text-sm font-bold transition-all ${
+                                            dealbreakers.includes(option)
+                                                ? "bg-foreground text-background"
+                                                : "bg-background text-foreground hover:bg-foreground hover:text-background"
+                                        }`}
                                     >
                                         {dealbreakers.includes(option) ? "✗ " : ""}
                                         {option}
@@ -521,50 +527,50 @@ export default function PreferenceForm({
                 {step === 5 && (
                     <div className="animate-fade-in space-y-8">
                         <div className="text-center">
-                            <h2 className="text-2xl font-bold text-foreground">
-                                💬 Anything else?
+                            <h2 className="text-2xl font-black uppercase tracking-tighter text-foreground">
+                                Anything Else?
                             </h2>
                             <p className="mt-2 text-muted">
-                                Last step! Share anything the group should know.
+                                Last step. Share anything the group should know.
                             </p>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-foreground mb-2">
-                                Anything the group should know?
+                            <label className="block text-sm font-black uppercase text-foreground mb-2">
+                                Notes for the group
                             </label>
                             <textarea
                                 rows={3}
                                 placeholder="e.g., I just want to chill on a beach and maybe do some hiking"
                                 value={additionalNotes}
                                 onChange={(e) => setAdditionalNotes(e.target.value)}
-                                className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+                                className="w-full border-4 border-foreground bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted/50 focus:outline-none transition-all resize-none"
                             />
                         </div>
 
                         {/* Summary preview */}
-                        <div className="rounded-2xl border border-border bg-card p-6">
-                            <h3 className="text-sm font-semibold text-foreground mb-4">
-                                📋 Your preference summary
+                        <div className="border-4 border-foreground p-6">
+                            <h3 className="text-xs font-black text-foreground uppercase tracking-widest mb-4">
+                                Your Preference Summary
                             </h3>
                             <div className="space-y-3 text-sm">
-                                <div className="flex justify-between">
-                                    <span className="text-muted">Budget</span>
-                                    <span className="font-medium">${budget.toLocaleString()}</span>
+                                <div className="flex justify-between border-b border-foreground/20 pb-2">
+                                    <span className="font-bold uppercase text-muted">Budget</span>
+                                    <span className="font-black">${budget.toLocaleString()}</span>
                                 </div>
-                                <div className="flex justify-between">
-                                    <span className="text-muted">Pace</span>
-                                    <span className="font-medium capitalize">{activityLevel}</span>
+                                <div className="flex justify-between border-b border-foreground/20 pb-2">
+                                    <span className="font-bold uppercase text-muted">Pace</span>
+                                    <span className="font-black uppercase">{activityLevel}</span>
                                 </div>
-                                <div className="flex justify-between">
-                                    <span className="text-muted">Stay</span>
-                                    <span className="font-medium capitalize">
+                                <div className="flex justify-between border-b border-foreground/20 pb-2">
+                                    <span className="font-bold uppercase text-muted">Stay</span>
+                                    <span className="font-black uppercase">
                                         {accommodationPref}
                                     </span>
                                 </div>
-                                <div className="flex justify-between">
-                                    <span className="text-muted">Top vibe</span>
-                                    <span className="font-medium">
+                                <div className="flex justify-between border-b border-foreground/20 pb-2">
+                                    <span className="font-bold uppercase text-muted">Top vibe</span>
+                                    <span className="font-black">
                                         {
                                             vibes.find(
                                                 (v) =>
@@ -577,8 +583,8 @@ export default function PreferenceForm({
                                 {dietary.length > 0 &&
                                     !dietary.includes("None") && (
                                         <div className="flex justify-between">
-                                            <span className="text-muted">Dietary</span>
-                                            <span className="font-medium">
+                                            <span className="font-bold uppercase text-muted">Dietary</span>
+                                            <span className="font-black">
                                                 {dietary.join(", ")}
                                             </span>
                                         </div>
@@ -590,18 +596,18 @@ export default function PreferenceForm({
 
                 {/* Error */}
                 {error && (
-                    <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    <div className="mt-4 border-4 border-foreground px-4 py-3 text-sm font-bold text-foreground">
                         {error}
                     </div>
                 )}
 
                 {/* Navigation buttons */}
                 {step > 0 && (
-                    <div className="mt-8 flex gap-3">
+                    <div className="mt-8 flex gap-0">
                         <button
                             type="button"
                             onClick={() => setStep(step - 1)}
-                            className="flex-1 rounded-xl border border-border bg-card py-3.5 font-medium text-foreground transition-all hover:bg-card-hover"
+                            className="flex-1 btn-brutal-outline py-3.5"
                         >
                             ← Back
                         </button>
@@ -609,7 +615,7 @@ export default function PreferenceForm({
                             <button
                                 type="button"
                                 onClick={() => setStep(step + 1)}
-                                className="flex-1 rounded-xl gradient-bg py-3.5 font-semibold text-white shadow-md transition-all hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+                                className="flex-1 btn-brutal py-3.5 -ml-1"
                             >
                                 Next →
                             </button>
@@ -618,33 +624,14 @@ export default function PreferenceForm({
                                 type="button"
                                 onClick={handleSubmit}
                                 disabled={loading}
-                                className="flex-1 rounded-xl gradient-bg py-3.5 font-semibold text-white shadow-md transition-all hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+                                className="flex-1 btn-brutal py-3.5 -ml-1 disabled:opacity-50"
                             >
                                 {loading ? (
-                                    <span className="flex items-center justify-center gap-2">
-                                        <svg
-                                            className="h-5 w-5 animate-spin"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                        >
-                                            <circle
-                                                className="opacity-25"
-                                                cx="12"
-                                                cy="12"
-                                                r="10"
-                                                stroke="currentColor"
-                                                strokeWidth="4"
-                                            />
-                                            <path
-                                                className="opacity-75"
-                                                fill="currentColor"
-                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                                            />
-                                        </svg>
+                                    <span className="flex items-center justify-center gap-2 animate-pulse">
                                         Saving...
                                     </span>
                                 ) : (
-                                    "Submit Preferences ✨"
+                                    "Submit Preferences ↗"
                                 )}
                             </button>
                         )}

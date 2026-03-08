@@ -61,58 +61,62 @@ export default function NewTripPage() {
         <div className="min-h-screen pt-24 pb-16 page-transition">
             <div className="mx-auto max-w-2xl px-4 sm:px-6">
                 {/* Header */}
-                <div className="text-center">
-                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-50 text-3xl">
-                        🗺️
-                    </div>
-                    <h1 className="text-3xl font-bold text-foreground">Plan a Trip</h1>
-                    <p className="mt-2 text-muted">
-                        Set up the basics and share with your crew
+                <div className="mb-10">
+                    <span className="text-3xl">⚑</span>
+                    <h1 className="mt-2 text-5xl sm:text-6xl font-black uppercase tracking-tighter text-foreground leading-[0.9]">
+                        PLAN
+                        <br />
+                        A TRIP
+                    </h1>
+                    <p className="mt-4 text-sm font-bold uppercase tracking-wide text-muted">
+                        SET UP THE BASICS. WE&apos;LL HANDLE THE REST.
                     </p>
                 </div>
 
                 {/* Form */}
-                <form onSubmit={handleSubmit} className="mt-10 space-y-8">
+                <form onSubmit={handleSubmit} className="space-y-0">
                     {/* Trip Name */}
-                    <div>
-                        <label className="block text-sm font-semibold text-foreground mb-2">
-                            What should we call this trip? ✏️
+                    <div className="border-t-2 border-foreground py-8">
+                        <label className="block text-sm font-black uppercase tracking-wide text-foreground mb-3">
+                            WHAT SHOULD WE CALL THIS TRIP?
                         </label>
                         <input
                             type="text"
                             required
-                            placeholder='e.g., "Summer Road Trip 2026"'
+                            placeholder="E.G., SUMMER ROAD TRIP 2026"
                             value={formData.name}
                             onChange={(e) =>
                                 setFormData({ ...formData, name: e.target.value })
                             }
-                            className="w-full rounded-xl border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                            className="w-full border-0 border-b-2 border-foreground/30 bg-transparent px-0 py-3 text-base font-bold uppercase text-foreground placeholder:text-muted/50 focus:border-foreground focus:outline-none focus:ring-0 transition-colors"
                         />
                     </div>
 
                     {/* Origin City */}
-                    <div>
-                        <label className="block text-sm font-semibold text-foreground mb-2">
-                            Where are you traveling from? 🏠
+                    <div className="border-t-2 border-foreground py-8">
+                        <label className="block text-sm font-black uppercase tracking-wide text-foreground mb-1">
+                            WHERE ARE YOU TRAVELING FROM?
                         </label>
+                        <p className="text-xs font-bold uppercase tracking-wide text-muted mb-3">
+                            USED FOR LOGISTICS AND COST ESTIMATES
+                        </p>
                         <input
                             type="text"
-                            placeholder='e.g., "Denver, CO" or "New York, NY"'
+                            placeholder="E.G., DENVER, CO"
                             value={formData.origin_city}
                             onChange={(e) =>
                                 setFormData({ ...formData, origin_city: e.target.value })
                             }
-                            className="w-full rounded-xl border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                            className="w-full border-0 border-b-2 border-foreground/30 bg-transparent px-0 py-3 text-base font-bold uppercase text-foreground placeholder:text-muted/50 focus:border-foreground focus:outline-none focus:ring-0 transition-colors"
                         />
-                        <p className="mt-1 text-xs text-muted">Used for flight/drive cost estimates</p>
                     </div>
 
                     {/* Group Size */}
-                    <div>
-                        <label className="block text-sm font-semibold text-foreground mb-2">
-                            How many travelers? 👥
+                    <div className="border-t-2 border-foreground py-8">
+                        <label className="block text-sm font-black uppercase tracking-wide text-foreground mb-4">
+                            HOW MANY TRAVELERS?
                         </label>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-6">
                             <input
                                 type="range"
                                 min="2"
@@ -124,20 +128,20 @@ export default function NewTripPage() {
                                         group_size: parseInt(e.target.value),
                                     })
                                 }
-                                className="flex-1 accent-[var(--primary)]"
+                                className="flex-1"
                             />
-                            <span className="flex h-12 w-12 items-center justify-center rounded-xl border border-border bg-card text-lg font-bold text-foreground">
+                            <span className="flex h-14 w-14 items-center justify-center border-4 border-foreground text-xl font-black text-foreground">
                                 {formData.group_size}
                             </span>
                         </div>
                     </div>
 
                     {/* Duration */}
-                    <div>
-                        <label className="block text-sm font-semibold text-foreground mb-2">
-                            Trip duration 📅
+                    <div className="border-t-2 border-foreground py-8">
+                        <label className="block text-sm font-black uppercase tracking-wide text-foreground mb-4">
+                            TRIP DURATION
                         </label>
-                        <div className="grid grid-cols-5 gap-2">
+                        <div className="grid grid-cols-5 gap-0">
                             {[3, 4, 5, 6, 7].map((days) => (
                                 <button
                                     key={days}
@@ -145,56 +149,54 @@ export default function NewTripPage() {
                                     onClick={() =>
                                         setFormData({ ...formData, trip_duration_days: days })
                                     }
-                                    className={`rounded-xl border py-3 text-center font-medium transition-all ${formData.trip_duration_days === days
-                                        ? "border-primary bg-primary text-white shadow-md"
-                                        : "border-border bg-card text-foreground hover:border-primary-light"
+                                    className={`border-2 border-foreground py-4 text-center font-black uppercase text-sm transition-colors -ml-[2px] first:ml-0 ${formData.trip_duration_days === days
+                                        ? "bg-foreground text-background"
+                                        : "bg-background text-foreground hover:bg-foreground hover:text-background"
                                         }`}
                                 >
-                                    {days} days
+                                    {days} DAYS
                                 </button>
                             ))}
                         </div>
                     </div>
 
                     {/* Date Flexibility */}
-                    <div>
-                        <label className="block text-sm font-semibold text-foreground mb-2">
-                            When are you going? 🗓️
+                    <div className="border-t-2 border-foreground py-8">
+                        <label className="block text-sm font-black uppercase tracking-wide text-foreground mb-4">
+                            WHEN ARE YOU GOING?
                         </label>
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-2 gap-0">
                             <button
                                 type="button"
                                 onClick={() =>
                                     setFormData({ ...formData, dateFlexibility: "flexible" })
                                 }
-                                className={`rounded-xl border p-4 text-center transition-all ${formData.dateFlexibility === "flexible"
-                                    ? "border-primary bg-indigo-50 text-primary shadow-sm"
-                                    : "border-border bg-card text-foreground hover:border-primary-light"
+                                className={`border-2 border-foreground p-5 text-center transition-colors ${formData.dateFlexibility === "flexible"
+                                    ? "bg-foreground text-background"
+                                    : "bg-background text-foreground hover:bg-foreground hover:text-background"
                                     }`}
                             >
-                                <div className="text-2xl mb-1">🤷</div>
-                                <div className="font-medium text-sm">We&apos;re Flexible</div>
+                                <div className="text-sm font-black uppercase">FLEXIBLE</div>
                             </button>
                             <button
                                 type="button"
                                 onClick={() =>
                                     setFormData({ ...formData, dateFlexibility: "specific" })
                                 }
-                                className={`rounded-xl border p-4 text-center transition-all ${formData.dateFlexibility === "specific"
-                                    ? "border-primary bg-indigo-50 text-primary shadow-sm"
-                                    : "border-border bg-card text-foreground hover:border-primary-light"
+                                className={`border-2 border-foreground -ml-[2px] p-5 text-center transition-colors ${formData.dateFlexibility === "specific"
+                                    ? "bg-foreground text-background"
+                                    : "bg-background text-foreground hover:bg-foreground hover:text-background"
                                     }`}
                             >
-                                <div className="text-2xl mb-1">📆</div>
-                                <div className="font-medium text-sm">Specific Dates</div>
+                                <div className="text-sm font-black uppercase">SPECIFIC DATES</div>
                             </button>
                         </div>
 
                         {formData.dateFlexibility === "specific" && (
-                            <div className="mt-4 grid grid-cols-2 gap-3 animate-fade-in">
+                            <div className="mt-6 grid grid-cols-2 gap-4 animate-fade-in">
                                 <div>
-                                    <label className="block text-xs text-muted mb-1">
-                                        Start date
+                                    <label className="block text-xs font-black uppercase text-muted mb-2">
+                                        START DATE
                                     </label>
                                     <input
                                         type="date"
@@ -202,12 +204,12 @@ export default function NewTripPage() {
                                         onChange={(e) =>
                                             setFormData({ ...formData, start_date: e.target.value })
                                         }
-                                        className="w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                        className="w-full border-2 border-foreground bg-transparent px-3 py-2.5 text-sm font-bold text-foreground focus:outline-none focus:ring-0"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-xs text-muted mb-1">
-                                        End date
+                                    <label className="block text-xs font-black uppercase text-muted mb-2">
+                                        END DATE
                                     </label>
                                     <input
                                         type="date"
@@ -215,7 +217,7 @@ export default function NewTripPage() {
                                         onChange={(e) =>
                                             setFormData({ ...formData, end_date: e.target.value })
                                         }
-                                        className="w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                        className="w-full border-2 border-foreground bg-transparent px-3 py-2.5 text-sm font-bold text-foreground focus:outline-none focus:ring-0"
                                     />
                                 </div>
                             </div>
@@ -223,25 +225,24 @@ export default function NewTripPage() {
                     </div>
 
                     {/* Destination Toggle */}
-                    <div>
-                        <label className="block text-sm font-semibold text-foreground mb-2">
-                            Do you already have a destination in mind? 📍
+                    <div className="border-t-2 border-foreground py-8">
+                        <label className="block text-sm font-black uppercase tracking-wide text-foreground mb-4">
+                            DESTINATION IN MIND?
                         </label>
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-2 gap-0">
                             <button
                                 type="button"
                                 onClick={() =>
                                     setFormData({ ...formData, hasDestination: false })
                                 }
-                                className={`rounded-xl border p-4 text-center transition-all ${!formData.hasDestination
-                                    ? "border-primary bg-indigo-50 text-primary shadow-sm"
-                                    : "border-border bg-card text-foreground hover:border-primary-light"
+                                className={`border-2 border-foreground p-5 text-center transition-colors ${!formData.hasDestination
+                                    ? "bg-foreground text-background"
+                                    : "bg-background text-foreground hover:bg-foreground hover:text-background"
                                     }`}
                             >
-                                <div className="text-2xl mb-1">🤖</div>
-                                <div className="font-medium text-sm">AI will suggest</div>
-                                <div className="text-xs text-muted mt-1">
-                                    Based on group preferences
+                                <div className="text-sm font-black uppercase">AI DECIDES</div>
+                                <div className="text-xs font-bold text-inherit/60 mt-1 uppercase">
+                                    BASED ON GROUP PREFS
                                 </div>
                             </button>
                             <button
@@ -249,29 +250,28 @@ export default function NewTripPage() {
                                 onClick={() =>
                                     setFormData({ ...formData, hasDestination: true })
                                 }
-                                className={`rounded-xl border p-4 text-center transition-all ${formData.hasDestination
-                                    ? "border-primary bg-indigo-50 text-primary shadow-sm"
-                                    : "border-border bg-card text-foreground hover:border-primary-light"
+                                className={`border-2 border-foreground -ml-[2px] p-5 text-center transition-colors ${formData.hasDestination
+                                    ? "bg-foreground text-background"
+                                    : "bg-background text-foreground hover:bg-foreground hover:text-background"
                                     }`}
                             >
-                                <div className="text-2xl mb-1">✅</div>
-                                <div className="font-medium text-sm">We know where</div>
-                                <div className="text-xs text-muted mt-1">
-                                    Enter your destination
+                                <div className="text-sm font-black uppercase">WE KNOW</div>
+                                <div className="text-xs font-bold text-inherit/60 mt-1 uppercase">
+                                    ENTER DESTINATION
                                 </div>
                             </button>
                         </div>
 
                         {formData.hasDestination && (
-                            <div className="mt-4 animate-fade-in">
+                            <div className="mt-6 animate-fade-in">
                                 <input
                                     type="text"
-                                    placeholder="e.g., Savannah, GA"
+                                    placeholder="E.G., SAVANNAH, GA"
                                     value={formData.destination}
                                     onChange={(e) =>
                                         setFormData({ ...formData, destination: e.target.value })
                                     }
-                                    className="w-full rounded-xl border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                    className="w-full border-0 border-b-2 border-foreground/30 bg-transparent px-0 py-3 text-base font-bold uppercase text-foreground placeholder:text-muted/50 focus:border-foreground focus:outline-none focus:ring-0 transition-colors"
                                 />
                             </div>
                         )}
@@ -279,44 +279,28 @@ export default function NewTripPage() {
 
                     {/* Error */}
                     {error && (
-                        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                            {error}
+                        <div className="border-4 border-foreground bg-background px-4 py-3 text-sm font-bold uppercase text-foreground">
+                            ✗ {error}
                         </div>
                     )}
 
                     {/* Submit */}
-                    <button
-                        type="submit"
-                        disabled={loading || !formData.name}
-                        className="w-full rounded-xl gradient-bg py-4 text-lg font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                    >
-                        {loading ? (
-                            <span className="flex items-center justify-center gap-2">
-                                <svg
-                                    className="h-5 w-5 animate-spin"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                >
-                                    <circle
-                                        className="opacity-25"
-                                        cx="12"
-                                        cy="12"
-                                        r="10"
-                                        stroke="currentColor"
-                                        strokeWidth="4"
-                                    />
-                                    <path
-                                        className="opacity-75"
-                                        fill="currentColor"
-                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                                    />
-                                </svg>
-                                Creating trip...
-                            </span>
-                        ) : (
-                            "Create Trip & Get Share Link 🔗"
-                        )}
-                    </button>
+                    <div className="border-t-2 border-foreground pt-8">
+                        <button
+                            type="submit"
+                            disabled={loading || !formData.name}
+                            className="btn-brutal w-full py-5 text-lg disabled:opacity-40 disabled:cursor-not-allowed"
+                        >
+                            {loading ? (
+                                <span className="flex items-center justify-center gap-3">
+                                    <span className="inline-block h-5 w-5 border-3 border-background border-t-transparent animate-spin" style={{ borderRadius: 0 }} />
+                                    CREATING TRIP...
+                                </span>
+                            ) : (
+                                "CREATE TRIP & GET SHARE LINK ↗"
+                            )}
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
