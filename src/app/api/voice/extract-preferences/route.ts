@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { askGeminiJSON } from "@/lib/gemini";
+import { createClient } from "@/lib/supabase/server";
 
 const SYSTEM_PROMPT = `You are an expert at extracting structured travel preferences from casual conversation transcripts.
 
@@ -34,6 +35,13 @@ If the user mentions preferences that don't match predefined options exactly, pu
 
 export async function POST(request: Request) {
     try {
+        const supabase = await createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
         const { transcript } = await request.json();
 
         if (!transcript || !Array.isArray(transcript) || transcript.length === 0) {

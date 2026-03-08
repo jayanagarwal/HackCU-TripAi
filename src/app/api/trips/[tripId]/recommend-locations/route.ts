@@ -168,6 +168,9 @@ ${JSON.stringify(
 
         // Save recommendations to DB
         if (recommendations.length > 0) {
+            // Prevent duplicates on re-run
+            await supabase.from("location_recommendations").delete().eq("trip_id", tripId);
+
             const inserts = recommendations.map((rec) => ({
                 trip_id: tripId,
                 destination: rec.name,

@@ -1,10 +1,22 @@
 import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { text, voiceId } = await request.json();
 
     if (!text) {
         return NextResponse.json({ error: "Text is required" }, { status: 400 });
+    }
+
+    if (text.length > 5000) {
+        return NextResponse.json({ error: "Text too long" }, { status: 400 });
     }
 
     const apiKey = process.env.ELEVENLABS_API_KEY;

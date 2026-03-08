@@ -151,10 +151,14 @@ export async function POST(
     };
   });
 
+  const exactNamesStr = prefsWithNames?.map(p => p.name).join(", ") || "Unknown";
+
   const userMessage = `Create a ${trip.trip_duration_days || 4}-day itinerary for ${destination}.
 
 Group Size: ${preferences?.length || trip.group_size || 4} people
 ${trip.origin_city ? `Origin City: ${trip.origin_city} (where the group is traveling from — use this for flight/drive cost estimates)` : ""}
+
+CRITICAL: Use these EXACT names in the budget_summary.per_person keys — do not use nicknames, truncations, or variations: ${exactNamesStr}
 
 Group Synthesis:
 ${JSON.stringify(synthesis, null, 2)}
@@ -186,8 +190,16 @@ ${trip.end_date ? `End Date: ${trip.end_date}` : ""}`;
 
         if (memberBudget == null) continue;
 
-        // Find this member in the budget summary (match by name)
-        const memberSummary = budgetSummary.per_person[memberName];
+        // Find this member in the budget summary (match by name, fallback to case-insensitive)
+        let memberSummary = budgetSummary.per_person[memberName];
+        if (!memberSummary) {
+          const key = Object.keys(budgetSummary.per_person).find(
+            (k) => k.toLowerCase() === memberName.toLowerCase()
+          );
+          if (key) {
+            memberSummary = budgetSummary.per_person[key];
+          }
+        }
         if (!memberSummary) continue;
 
         const estimatedTotal = memberSummary.total;

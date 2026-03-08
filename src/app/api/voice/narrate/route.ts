@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { askGeminiJSON } from "@/lib/gemini";
+import { createClient } from "@/lib/supabase/server";
 
 const NARRATION_PROMPT = `You are a friendly, enthusiastic travel agent presenting a trip itinerary to a group of friends.
 
@@ -19,6 +20,13 @@ Return ONLY this JSON:
 
 export async function POST(request: Request) {
     try {
+        const supabase = await createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
         const { itinerary, destination, members } = await request.json();
 
         if (!itinerary || !destination) {
@@ -39,9 +47,23 @@ export async function POST(request: Request) {
         // Step 1: Generate narration script with Gemini
         const memberNames = members?.map((m: any) => m.name).join(", ") || "the group";
 
+        // Trim the itinerary to save tokens
+        const trimmedItinerary = {
+            days: itinerary.days?.map((day: any) => ({
+                date: day.date,
+                theme: day.theme,
+                activities: day.activities?.map((a: any) => ({
+                    time: a.time,
+                    name: a.name,
+                    participants: a.participants,
+                    estimated_cost_pp: a.estimated_cost_pp
+                }))
+            }))
+        };
+
         const result: any = await askGeminiJSON(
             NARRATION_PROMPT,
-            `Create a narration for this trip:\n\nDestination: ${destination}\nGroup members: ${memberNames}\n\nItinerary:\n${JSON.stringify(itinerary, null, 2)}`
+            `Create a narration for this trip:\n\nDestination: ${destination}\nGroup members: ${memberNames}\n\nItinerary:\n${JSON.stringify(trimmedItinerary, null, 2)}`
         );
 
         const script = result?.script;
