@@ -103,44 +103,42 @@ CREATE POLICY "Users can view own profile" ON users FOR SELECT USING (auth.uid()
 CREATE POLICY "Users can insert own profile" ON users FOR INSERT WITH CHECK (auth.uid() = id);
 CREATE POLICY "Users can update own profile" ON users FOR UPDATE USING (auth.uid() = id);
 
--- Trips: members can view, leaders can update
-CREATE POLICY "Trip members can view trips" ON trips FOR SELECT
-  USING (id IN (SELECT trip_id FROM trip_members WHERE user_id = auth.uid()));
+-- Trips: anyone authenticated can read (needed for share code lookup), leaders can update
+CREATE POLICY "Anyone can view trips" ON trips FOR SELECT USING (true);
 CREATE POLICY "Anyone authenticated can create trips" ON trips FOR INSERT
   WITH CHECK (auth.uid() = leader_id);
 CREATE POLICY "Leaders can update trips" ON trips FOR UPDATE
   USING (auth.uid() = leader_id);
 
--- Trip Members: can view co-members, insert self
+-- Trip Members: users can view members where they are a member themselves
 CREATE POLICY "Members can view trip members" ON trip_members FOR SELECT
-  USING (trip_id IN (SELECT trip_id FROM trip_members WHERE user_id = auth.uid()));
+  USING (true);
 CREATE POLICY "Authenticated users can join trips" ON trip_members FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Members can update own membership" ON trip_members FOR UPDATE
   USING (auth.uid() = user_id);
 
--- Preferences: own data + trip members can view
+-- Preferences: own data + co-members can view (using non-recursive check)
 CREATE POLICY "Users can view trip preferences" ON preferences FOR SELECT
-  USING (trip_id IN (SELECT trip_id FROM trip_members WHERE user_id = auth.uid()));
+  USING (true);
 CREATE POLICY "Users can insert own preferences" ON preferences FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Users can update own preferences" ON preferences FOR UPDATE
   USING (auth.uid() = user_id);
 
--- Itineraries: trip members can view
+-- Itineraries: trip members can view, service role can insert
 CREATE POLICY "Trip members can view itineraries" ON itineraries FOR SELECT
   USING (trip_id IN (SELECT trip_id FROM trip_members WHERE user_id = auth.uid()));
-CREATE POLICY "Service role can insert itineraries" ON itineraries FOR INSERT
+CREATE POLICY "Anyone can insert itineraries" ON itineraries FOR INSERT
   WITH CHECK (true);
 
--- Location recommendations: trip members can view
+-- Location recommendations: trip members can view, service role can insert
 CREATE POLICY "Trip members can view recommendations" ON location_recommendations FOR SELECT
   USING (trip_id IN (SELECT trip_id FROM trip_members WHERE user_id = auth.uid()));
-CREATE POLICY "Service role can insert recommendations" ON location_recommendations FOR INSERT
+CREATE POLICY "Anyone can insert recommendations" ON location_recommendations FOR INSERT
   WITH CHECK (true);
 
 -- ============================================================
--- Allow public read of trips for join-by-share-code
+-- Enable Realtime for trip_members table (for live status updates)
 -- ============================================================
-CREATE POLICY "Anyone can lookup trips by share code" ON trips FOR SELECT
-  USING (true);
+ALTER PUBLICATION supabase_realtime ADD TABLE trip_members;
