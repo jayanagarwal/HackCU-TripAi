@@ -99,7 +99,9 @@ ${JSON.stringify(
     try {
         const result = await askGeminiJSON<{ recommendations: Recommendation[] }>(
             SYSTEM_PROMPT,
-            userMessage
+            userMessage,
+            2,
+            true // Enable Google Search grounding
         );
 
         // Save recommendations to DB

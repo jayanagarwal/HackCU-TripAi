@@ -149,8 +149,8 @@ export default function StatusDashboard({
                             <button
                                 onClick={handleCopy}
                                 className={`shrink-0 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${copied
-                                        ? "bg-emerald-500 text-white"
-                                        : "gradient-bg text-white hover:shadow-md hover:scale-105 active:scale-95"
+                                    ? "bg-emerald-500 text-white"
+                                    : "gradient-bg text-white hover:shadow-md hover:scale-105 active:scale-95"
                                     }`}
                             >
                                 {copied ? "✓ Copied!" : "Copy"}
@@ -281,12 +281,16 @@ export default function StatusDashboard({
                             Everyone&apos;s submitted. Time to let the AI work its magic.
                         </p>
                         {isLeader ? (
-                            <Link
-                                href={`/trip/${trip.id}/locations`}
-                                className="mt-4 inline-flex items-center gap-2 rounded-full bg-emerald-600 px-8 py-3 text-base font-semibold text-white shadow-md transition-all hover:bg-emerald-700 hover:shadow-lg hover:scale-105 active:scale-95"
-                            >
-                                Generate Plan 🤖
-                            </Link>
+                            trip.destination ? (
+                                <GenerateDirectButton tripId={trip.id} destination={trip.destination} />
+                            ) : (
+                                <Link
+                                    href={`/trip/${trip.id}/locations`}
+                                    className="mt-4 inline-flex items-center gap-2 rounded-full bg-emerald-600 px-8 py-3 text-base font-semibold text-white shadow-md transition-all hover:bg-emerald-700 hover:shadow-lg hover:scale-105 active:scale-95"
+                                >
+                                    Generate Plan 🤖
+                                </Link>
+                            )
                         ) : (
                             <p className="mt-3 text-sm text-emerald-600">
                                 The trip leader will generate the plan soon!
@@ -310,5 +314,73 @@ export default function StatusDashboard({
                 )}
             </div>
         </div>
+    );
+}
+
+/** Button that skips location recommendations when destination is already set */
+function GenerateDirectButton({ tripId, destination }: { tripId: string; destination: string }) {
+    const router = useRouter();
+    const [phase, setPhase] = useState<"idle" | "synthesizing" | "generating" | "error">("idle");
+    const [error, setError] = useState("");
+
+    const handleGenerate = async () => {
+        setPhase("synthesizing");
+        setError("");
+
+        try {
+            // Step 1: Synthesize preferences
+            const synthRes = await fetch(`/api/trips/${tripId}/synthesize`, { method: "POST" });
+            const synthData = await synthRes.json();
+            if (!synthRes.ok) throw new Error(synthData.error);
+
+            // Step 2: Skip recommendations, go straight to itinerary
+            setPhase("generating");
+            const itinRes = await fetch(`/api/trips/${tripId}/generate-itinerary`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ destination, synthesis: synthData.synthesis }),
+            });
+            const itinData = await itinRes.json();
+            if (!itinRes.ok) throw new Error(itinData.error);
+
+            router.push(`/trip/${tripId}/itinerary`);
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : "Something went wrong");
+            setPhase("error");
+        }
+    };
+
+    if (phase === "synthesizing" || phase === "generating") {
+        return (
+            <div className="mt-4">
+                <div className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-8 py-3 text-base font-semibold text-white shadow-md animate-pulse">
+                    {phase === "synthesizing" ? "🧠 Analyzing preferences..." : `✨ Building ${destination} itinerary...`}
+                </div>
+                <p className="mt-2 text-xs text-emerald-600/70">This may take 10-20 seconds</p>
+            </div>
+        );
+    }
+
+    if (phase === "error") {
+        return (
+            <div className="mt-4">
+                <p className="text-sm text-red-600 mb-2">{error}</p>
+                <button
+                    onClick={handleGenerate}
+                    className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-8 py-3 text-base font-semibold text-white shadow-md transition-all hover:bg-emerald-700"
+                >
+                    Try Again 🔄
+                </button>
+            </div>
+        );
+    }
+
+    return (
+        <button
+            onClick={handleGenerate}
+            className="mt-4 inline-flex items-center gap-2 rounded-full bg-emerald-600 px-8 py-3 text-base font-semibold text-white shadow-md transition-all hover:bg-emerald-700 hover:shadow-lg hover:scale-105 active:scale-95"
+        >
+            Generate Plan for {destination} 🤖
+        </button>
     );
 }

@@ -10,6 +10,7 @@ export default function NewTripPage() {
 
     const [formData, setFormData] = useState({
         name: "",
+        origin_city: "",
         hasDestination: false,
         destination: "",
         dateFlexibility: "flexible" as "flexible" | "specific",
@@ -30,6 +31,7 @@ export default function NewTripPage() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     name: formData.name,
+                    origin_city: formData.origin_city || null,
                     destination: formData.hasDestination ? formData.destination : null,
                     start_date:
                         formData.dateFlexibility === "specific"
@@ -88,6 +90,23 @@ export default function NewTripPage() {
                         />
                     </div>
 
+                    {/* Origin City */}
+                    <div>
+                        <label className="block text-sm font-semibold text-foreground mb-2">
+                            Where are you traveling from? 🏠
+                        </label>
+                        <input
+                            type="text"
+                            placeholder='e.g., "Denver, CO" or "New York, NY"'
+                            value={formData.origin_city}
+                            onChange={(e) =>
+                                setFormData({ ...formData, origin_city: e.target.value })
+                            }
+                            className="w-full rounded-xl border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                        />
+                        <p className="mt-1 text-xs text-muted">Used for flight/drive cost estimates</p>
+                    </div>
+
                     {/* Group Size */}
                     <div>
                         <label className="block text-sm font-semibold text-foreground mb-2">
@@ -127,8 +146,8 @@ export default function NewTripPage() {
                                         setFormData({ ...formData, trip_duration_days: days })
                                     }
                                     className={`rounded-xl border py-3 text-center font-medium transition-all ${formData.trip_duration_days === days
-                                            ? "border-primary bg-primary text-white shadow-md"
-                                            : "border-border bg-card text-foreground hover:border-primary-light"
+                                        ? "border-primary bg-primary text-white shadow-md"
+                                        : "border-border bg-card text-foreground hover:border-primary-light"
                                         }`}
                                 >
                                     {days} days
@@ -149,8 +168,8 @@ export default function NewTripPage() {
                                     setFormData({ ...formData, dateFlexibility: "flexible" })
                                 }
                                 className={`rounded-xl border p-4 text-center transition-all ${formData.dateFlexibility === "flexible"
-                                        ? "border-primary bg-indigo-50 text-primary shadow-sm"
-                                        : "border-border bg-card text-foreground hover:border-primary-light"
+                                    ? "border-primary bg-indigo-50 text-primary shadow-sm"
+                                    : "border-border bg-card text-foreground hover:border-primary-light"
                                     }`}
                             >
                                 <div className="text-2xl mb-1">🤷</div>
@@ -162,8 +181,8 @@ export default function NewTripPage() {
                                     setFormData({ ...formData, dateFlexibility: "specific" })
                                 }
                                 className={`rounded-xl border p-4 text-center transition-all ${formData.dateFlexibility === "specific"
-                                        ? "border-primary bg-indigo-50 text-primary shadow-sm"
-                                        : "border-border bg-card text-foreground hover:border-primary-light"
+                                    ? "border-primary bg-indigo-50 text-primary shadow-sm"
+                                    : "border-border bg-card text-foreground hover:border-primary-light"
                                     }`}
                             >
                                 <div className="text-2xl mb-1">📆</div>
@@ -215,8 +234,8 @@ export default function NewTripPage() {
                                     setFormData({ ...formData, hasDestination: false })
                                 }
                                 className={`rounded-xl border p-4 text-center transition-all ${!formData.hasDestination
-                                        ? "border-primary bg-indigo-50 text-primary shadow-sm"
-                                        : "border-border bg-card text-foreground hover:border-primary-light"
+                                    ? "border-primary bg-indigo-50 text-primary shadow-sm"
+                                    : "border-border bg-card text-foreground hover:border-primary-light"
                                     }`}
                             >
                                 <div className="text-2xl mb-1">🤖</div>
@@ -231,8 +250,8 @@ export default function NewTripPage() {
                                     setFormData({ ...formData, hasDestination: true })
                                 }
                                 className={`rounded-xl border p-4 text-center transition-all ${formData.hasDestination
-                                        ? "border-primary bg-indigo-50 text-primary shadow-sm"
-                                        : "border-border bg-card text-foreground hover:border-primary-light"
+                                    ? "border-primary bg-indigo-50 text-primary shadow-sm"
+                                    : "border-border bg-card text-foreground hover:border-primary-light"
                                     }`}
                             >
                                 <div className="text-2xl mb-1">✅</div>

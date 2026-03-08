@@ -12,6 +12,8 @@ interface Activity {
     estimated_cost_pp: number;
     category: "food" | "activity" | "transportation" | "free";
     reasoning: string;
+    confidence?: "verified" | "suggested";
+    dietary_notes?: string;
 }
 
 interface Day {
@@ -21,16 +23,33 @@ interface Day {
     activities: Activity[];
 }
 
-interface Accommodation {
+interface AccommodationOption {
     name: string;
     type: string;
     cost_per_night: number;
     reasoning: string;
+    confidence?: "verified" | "suggested";
+}
+
+interface Transportation {
+    type: "flight" | "drive" | "mixed";
+    estimated_cost_pp: number;
+    notes: string;
 }
 
 interface ItineraryData {
     days: Day[];
-    accommodation?: Accommodation;
+    accommodation?: {
+        // New format with options
+        options?: AccommodationOption[];
+        recommended?: string;
+        // Legacy single format
+        name?: string;
+        type?: string;
+        cost_per_night?: number;
+        reasoning?: string;
+    };
+    transportation?: Transportation;
     budget_summary?: {
         per_person: Record<string, { total: number; accommodation: number; food: number; activities: number; transportation: number }>;
         group_total: number;
@@ -74,19 +93,26 @@ export default function ItineraryView({
     trip,
     itinerary,
     destination,
-    members,
 }: ItineraryViewProps) {
     const [expandedReasoning, setExpandedReasoning] = useState<string | null>(null);
-    const [activeDay, setActiveDay] = useState(0);
+    const [activeDay, setActiveDay] = useState(-3); // Start on overview
 
     const days = itinerary?.days || [];
     const accommodation = itinerary?.accommodation;
+    const transportation = itinerary?.transportation;
     const budgetSummary = itinerary?.budget_summary;
+
+    // Normalize accommodation to options format
+    const accommodationOptions: AccommodationOption[] = accommodation?.options
+        ? accommodation.options
+        : accommodation?.name
+            ? [{ name: accommodation.name, type: accommodation.type || "hotel", cost_per_night: accommodation.cost_per_night || 0, reasoning: accommodation.reasoning || "", confidence: "suggested" as const }]
+            : [];
 
     return (
         <div className="min-h-screen pb-16 page-transition">
-            {/* Sticky header */}
-            <div className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur-md">
+            {/* Sticky header — below navbar */}
+            <div className="sticky top-16 z-30 border-b border-border bg-card/95 backdrop-blur-md">
                 <div className="mx-auto max-w-4xl px-4 py-3 sm:px-6">
                     <div className="flex items-center justify-between">
                         <div>
@@ -105,36 +131,25 @@ export default function ItineraryView({
 
                     {/* Day tabs */}
                     <div className="mt-2 flex gap-1 overflow-x-auto pb-1 -mx-1 px-1">
+                        <button
+                            onClick={() => setActiveDay(-3)}
+                            className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${activeDay === -3 ? "gradient-bg text-white shadow-sm" : "text-muted hover:bg-card-hover"}`}
+                        >
+                            📋 Overview
+                        </button>
                         {days.map((day, i) => (
                             <button
                                 key={i}
                                 onClick={() => setActiveDay(i)}
-                                className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${activeDay === i
-                                        ? "gradient-bg text-white shadow-sm"
-                                        : "text-muted hover:bg-card-hover"
-                                    }`}
+                                className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${activeDay === i ? "gradient-bg text-white shadow-sm" : "text-muted hover:bg-card-hover"}`}
                             >
                                 Day {day.day_number}
                             </button>
                         ))}
-                        {accommodation && (
-                            <button
-                                onClick={() => setActiveDay(-1)}
-                                className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${activeDay === -1
-                                        ? "gradient-bg text-white shadow-sm"
-                                        : "text-muted hover:bg-card-hover"
-                                    }`}
-                            >
-                                🏨 Stay
-                            </button>
-                        )}
                         {budgetSummary && (
                             <button
                                 onClick={() => setActiveDay(-2)}
-                                className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${activeDay === -2
-                                        ? "gradient-bg text-white shadow-sm"
-                                        : "text-muted hover:bg-card-hover"
-                                    }`}
+                                className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${activeDay === -2 ? "gradient-bg text-white shadow-sm" : "text-muted hover:bg-card-hover"}`}
                             >
                                 💰 Budget
                             </button>
@@ -144,6 +159,75 @@ export default function ItineraryView({
             </div>
 
             <div className="mx-auto max-w-4xl px-4 pt-6 sm:px-6">
+                {/* Overview tab — Transportation + Accommodation */}
+                {activeDay === -3 && (
+                    <div className="animate-fade-in space-y-6">
+                        <h2 className="text-2xl font-bold text-foreground">Trip Overview</h2>
+
+                        {/* Transportation */}
+                        {transportation && (
+                            <div className="rounded-2xl border border-border bg-card p-6">
+                                <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                                    {transportation.type === "flight" ? "✈️" : transportation.type === "drive" ? "🚗" : "🚗✈️"} Getting There
+                                </h3>
+                                <div className="mt-3 flex gap-3">
+                                    <span className="rounded-full bg-indigo-50 border border-indigo-200 px-3 py-1 text-xs font-medium text-indigo-700 capitalize">
+                                        {transportation.type}
+                                    </span>
+                                    <span className="rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-xs font-medium text-emerald-700">
+                                        ~${transportation.estimated_cost_pp}/person
+                                    </span>
+                                </div>
+                                <p className="mt-3 text-sm text-foreground/70">{transportation.notes}</p>
+                            </div>
+                        )}
+
+                        {/* Accommodation Options */}
+                        {accommodationOptions.length > 0 && (
+                            <div>
+                                <h3 className="text-lg font-semibold text-foreground mb-3">🏨 Where to Stay</h3>
+                                <div className="space-y-3">
+                                    {accommodationOptions.map((option, i) => (
+                                        <div
+                                            key={i}
+                                            className={`rounded-xl border p-4 transition-all ${accommodation?.recommended === option.name
+                                                ? "border-emerald-300 bg-emerald-50/50 ring-1 ring-emerald-200"
+                                                : "border-border bg-card"
+                                                }`}
+                                        >
+                                            <div className="flex items-start justify-between">
+                                                <div>
+                                                    <div className="flex items-center gap-2">
+                                                        <h4 className="font-semibold text-foreground">{option.name}</h4>
+                                                        {accommodation?.recommended === option.name && (
+                                                            <span className="rounded-full bg-emerald-100 border border-emerald-300 px-2 py-0.5 text-[10px] font-medium text-emerald-700">
+                                                                ⭐ Top Pick
+                                                            </span>
+                                                        )}
+                                                        {option.confidence && (
+                                                            <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${option.confidence === "verified"
+                                                                ? "bg-blue-50 border border-blue-200 text-blue-700"
+                                                                : "bg-amber-50 border border-amber-200 text-amber-700"
+                                                                }`}>
+                                                                {option.confidence === "verified" ? "✓ Verified" : "💡 Suggested"}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <span className="text-xs text-muted capitalize">{option.type}</span>
+                                                </div>
+                                                <span className="shrink-0 text-base font-bold gradient-text">
+                                                    ${option.cost_per_night}/night
+                                                </span>
+                                            </div>
+                                            <p className="mt-2 text-sm text-foreground/70">{option.reasoning}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
                 {/* Day view */}
                 {activeDay >= 0 && days[activeDay] && (
                     <div className="animate-fade-in">
@@ -179,7 +263,7 @@ export default function ItineraryView({
                                             >
                                                 <div className="flex items-start justify-between gap-2">
                                                     <div className="flex-1 min-w-0">
-                                                        <div className="flex items-center gap-2">
+                                                        <div className="flex flex-wrap items-center gap-2">
                                                             <span className="text-xs font-medium text-muted">
                                                                 {activity.time}
                                                             </span>
@@ -188,6 +272,14 @@ export default function ItineraryView({
                                                             >
                                                                 {typeStyle.label}
                                                             </span>
+                                                            {activity.confidence && (
+                                                                <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${activity.confidence === "verified"
+                                                                    ? "bg-blue-50/80 border border-blue-200 text-blue-600"
+                                                                    : "bg-amber-50/80 border border-amber-200 text-amber-600"
+                                                                    }`}>
+                                                                    {activity.confidence === "verified" ? "✓" : "💡"}
+                                                                </span>
+                                                            )}
                                                         </div>
                                                         <h3 className="mt-1 font-semibold text-foreground">
                                                             {activity.name}
@@ -195,6 +287,11 @@ export default function ItineraryView({
                                                         <p className="mt-0.5 text-sm text-foreground/70">
                                                             {activity.description}
                                                         </p>
+                                                        {activity.dietary_notes && (
+                                                            <p className="mt-1 text-xs text-emerald-600">
+                                                                🥗 {activity.dietary_notes}
+                                                            </p>
+                                                        )}
                                                     </div>
                                                     {activity.estimated_cost_pp > 0 && (
                                                         <span className="shrink-0 rounded-lg bg-white/80 border border-border px-2 py-1 text-xs font-medium text-foreground">
@@ -236,31 +333,6 @@ export default function ItineraryView({
                                     );
                                 })}
                             </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Accommodation view */}
-                {activeDay === -1 && accommodation && (
-                    <div className="animate-fade-in">
-                        <h2 className="text-2xl font-bold text-foreground mb-6">
-                            🏨 Accommodation
-                        </h2>
-                        <div className="rounded-2xl border border-border bg-card p-6">
-                            <h3 className="text-xl font-bold text-foreground">
-                                {accommodation.name}
-                            </h3>
-                            <div className="mt-2 flex gap-3">
-                                <span className="rounded-full bg-indigo-50 border border-indigo-200 px-3 py-1 text-xs font-medium text-indigo-700 capitalize">
-                                    {accommodation.type}
-                                </span>
-                                <span className="rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-xs font-medium text-emerald-700">
-                                    ${accommodation.cost_per_night}/night
-                                </span>
-                            </div>
-                            <p className="mt-4 text-sm text-foreground/70">
-                                {accommodation.reasoning}
-                            </p>
                         </div>
                     </div>
                 )}

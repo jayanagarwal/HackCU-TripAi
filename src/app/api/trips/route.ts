@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { name, start_date, end_date, trip_duration_days, group_size, destination } = body;
+    const { name, start_date, end_date, trip_duration_days, group_size, destination, origin_city } = body;
 
     if (!name) {
         return NextResponse.json({ error: "Trip name is required" }, { status: 400 });
@@ -67,6 +67,7 @@ export async function POST(request: Request) {
             share_code: shareCode,
             status: "collecting",
             destination: destination || null,
+            origin_city: origin_city || null,
             start_date: start_date || null,
             end_date: end_date || null,
             trip_duration_days: trip_duration_days || null,

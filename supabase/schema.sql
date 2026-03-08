@@ -20,6 +20,7 @@ CREATE TABLE trips (
   share_code TEXT UNIQUE NOT NULL,
   status TEXT DEFAULT 'collecting' CHECK (status IN ('collecting', 'ready', 'planning', 'complete')),
   destination TEXT,
+  origin_city TEXT,
   start_date DATE,
   end_date DATE,
   trip_duration_days INTEGER,
